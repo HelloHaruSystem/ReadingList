@@ -54,8 +54,8 @@ public class ReadingListService : IReadingListService
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus newStatus)
+    public async Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus newStatus)
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.UpdateReadingStatusAsync(userBookId, newStatus);
     }
 }

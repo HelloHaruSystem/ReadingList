@@ -143,8 +143,30 @@ public class UserBookRepository : IUserBookRepository
         }
     }
 
-    public Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus status)
+    public async Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus status)
     {
-        throw new NotImplementedException();
+        const string sql = @"
+        UPDATE user_books
+        SET reading_status = @status, updated_at = @updatedAt
+        WHERE id = @userBookId";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@status", status.ToString().ToLower());
+        command.Parameters.AddWithValue("@updatedAt", DateTime.Now);
+        command.Parameters.AddWithValue("@userBookId", userBookId);
+
+        try
+        {
+            await connection.OpenAsync();
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error updating status book:\n{0}\n", ex.Message);
+            return false;
+        }
     }
 }
