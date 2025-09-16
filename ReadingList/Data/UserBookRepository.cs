@@ -13,7 +13,7 @@ public class UserBookRepository : IUserBookRepository
 
     public UserBookRepository(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = ConnectionStringHelper.GetRequiredConnectionString(configuration, "DefaultConnection");
     }
 
     public async Task<int> AddToReadingListAsync(string isbn, ReadingStatus status = ReadingStatus.ToRead)

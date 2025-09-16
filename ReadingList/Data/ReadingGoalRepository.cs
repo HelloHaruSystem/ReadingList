@@ -11,7 +11,7 @@ public class ReadingGoalRepository : IReadingGoalRepository
 
     public ReadingGoalRepository(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = ConnectionStringHelper.GetRequiredConnectionString(configuration, "DefaultConnection");
     }
 
     public async Task<bool> AddBookToGoalAsync(int goalId, string isbn)

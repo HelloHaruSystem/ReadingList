@@ -11,7 +11,7 @@ public class BookRepository : IBookRepository
 
     public BookRepository(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = ConnectionStringHelper.GetRequiredConnectionString(configuration, "DefaultConnection");
     }
 
     public async Task<IEnumerable<Book>> GetAllBooksAsync()
