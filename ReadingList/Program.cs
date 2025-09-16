@@ -1,10 +1,28 @@
-﻿using ReadingList.Views;
+﻿using Microsoft.Extensions.Configuration;
+using ReadingList.Data;
+using ReadingList.Models;
+using ReadingList.Services;
+using ReadingList.Views;
 using Terminal.Gui;
 
 Console.WriteLine("Hello, World!");
 
 
 // test crud stuff
+IConfigurationRoot config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+IBookRepository bookRepository = new BookRepository(config);
+IBookService bookService = new BookService(bookRepository);
+
+List<Book> books = (await bookService.GetAllBooksAsync()).ToList();
+
+foreach (Book b in books) 
+{
+    System.Console.Write("{0} ({1})\n", b.Title, b.PublicationYear);
+}
+
 /* crud goals
 
 === Reading List App ===
