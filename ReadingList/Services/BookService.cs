@@ -33,11 +33,6 @@ public class BookService : IBookService
         return await _bookRepository.GetWithDetailsAsync(isbn);
     }
 
-    public Task<IEnumerable<Book>> GetRecentlyAddedBooksAsync(int count = 10)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<Book>> SearchBooksAsync(string searchTerm)
     {
         return await _bookRepository.SearchBooksAsync(searchTerm);

@@ -1,6 +1,6 @@
 using Terminal.Gui;
 
-namespace ReadingList.Views;
+namespace ReadingList.Tui.Views;
 
 public class ExampleWindow : Window
 {

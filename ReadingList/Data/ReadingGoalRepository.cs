@@ -104,7 +104,8 @@ public class ReadingGoalRepository : IReadingGoalRepository
                 });
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
             return new List<ReadingGoal>();
         }
@@ -135,6 +136,65 @@ public class ReadingGoalRepository : IReadingGoalRepository
         {
             Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
             return false;
+        }
+    }
+
+    public async Task<ReadingGoal?> GetGoalProgressAsync(int goalId)
+    {
+        ReadingGoal? goal = null;
+
+        const string sql = @"
+            SELECT 
+                rg..*,
+                COUNT(gb.book_isbn) AS books_added,
+                SUM(
+                    CASE WHEN
+                        b.pages IS NOT NULL THEN b.pages ELSE 0
+                    END
+                )
+            FROM reading_goals AS rg
+            LEFT JOIN goal_books AS gb
+            ON gb.goal_id = rg.id
+            LEFT JOIN books AS b
+            ON b.isbn = gb.book_isbn
+            WHERE rg.id = @goalId
+            GROUP BY
+                rg.id, rg.goal_name
+                rg,description, rg.start_date,
+                rg.deadline, rg.target_books,
+                rg.target_pages, rg..is_completed";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@goalId", goalId);
+
+        try
+        {
+            await connection.OpenAsync();
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                goal = new ReadingGoal
+                {
+                    Id = SqlDataReaderHelper.GetInt(reader, "id"),
+                    GoalName = SqlDataReaderHelper.GetString(reader, "goal_name"),
+                    Description = SqlDataReaderHelper.GetStringOrNull(reader, "description"),
+                    StartDate = SqlDataReaderHelper.GetDateTime(reader, "start_date"),
+                    Deadline = SqlDataReaderHelper.GetDateTime(reader, "deadline"),
+                    TargetBooks = SqlDataReaderHelper.GetIntOrNull(reader, "target_books"),
+                    TargetPages = SqlDataReaderHelper.GetIntOrNull(reader, "target_pages"),
+                    IsCompleted = SqlDataReaderHelper.GetBool(reader, "is_completed"),
+                };
+            }
+            
+            return goal;
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching goal progress from DB:\n{0}\n", ex.Message);
+            return null;
         }
     }
 }
