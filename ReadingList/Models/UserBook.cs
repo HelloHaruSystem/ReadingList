@@ -5,7 +5,7 @@ namespace ReadingList.Models;
 public class UserBook
 {
     public int Id { get; set; }
-    public int BookISBN { get; set; }
+    public string BookISBN { get; set; }
     public ReadingStatus Status { get; set; }
     public int? PersonalRating { get; set; }
     public string? PersonalNotes { get; set; }

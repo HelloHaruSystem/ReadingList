@@ -28,9 +28,9 @@ public class BookService : IBookService
         throw new NotImplementedException();
     }
 
-    public Task<Book> GetBookWithDetailsAsync(string isbn)
+    public async Task<Book?> GetBookWithDetailsAsync(string isbn)
     {
-        throw new NotImplementedException();
+        return await _bookRepository.GetWithDetailsAsync(isbn);
     }
 
     public Task<IEnumerable<Book>> GetRecentlyAddedBooksAsync(int count = 10)

@@ -45,4 +45,9 @@ public static class SqlDataReaderHelper
         int ordinal = reader.GetOrdinal(columnName);
         return reader.GetBoolean(ordinal);
     }
+
+    public static bool IsNull(SqlDataReader reader, string columnName)
+    {
+        return reader.IsDBNull(reader.GetOrdinal(columnName));
+    }
 }

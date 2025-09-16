@@ -21,9 +21,50 @@ if (!(config.GetConnectionString("DefaultConnection") == null))
 
     List<Book> books = (await bookService.GetBooksBySubjectAsync(SubjectType.Algorithms)).ToList();
 
-    foreach (Book b in books) 
+    foreach (Book b in books)
     {
-        System.Console.Write("{0} ({1})\n", b.Title, b.PublicationYear);
+        Console.Write("{0} ({1})\n", b.Title, b.PublicationYear);
+    }
+
+    Book? details = await bookService.GetBookWithDetailsAsync("9780131103627");
+    if (details != null)
+    {
+        Console.WriteLine("=== Book Details ===");
+        Console.WriteLine("ISBN: {0}", details.ISBN);
+        Console.WriteLine("Title: {0}", details.Title);
+        Console.WriteLine("Publication Year: {0}", details.PublicationYear?.ToString() ?? "N/A");
+        Console.WriteLine("Pages: {0}", details.Pages?.ToString() ?? "N/A");
+        Console.WriteLine("Description: {0}", details.Description ?? "No description available");
+    
+        Console.WriteLine("\nAuthors:");
+        if (details.Authors.Any())
+        {
+            foreach (var author in details.Authors)
+            {
+                Console.WriteLine("  - {0} (ID: {1})", author.FullName, author.Id);
+            }
+        }   
+        else
+        {
+            Console.WriteLine("  No authors found");
+        }
+    
+        Console.WriteLine("\nSubjects:");
+        if (details.Subjects.Any())
+        {
+            foreach (var subject in details.Subjects)
+            {
+                Console.WriteLine("  - {0} (ID: {1})", subject.SubjectName, subject.Id);
+            }
+        }
+        else
+        {
+            Console.WriteLine("  No subjects found");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Book not found with ISBN: 9780131103627");
     }
 }
 
