@@ -33,9 +33,12 @@ public class ReadingGoalService : IReadingGoalService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<ReadingGoal>> GetUpcomingDeadlinesAsync(int days = 7)
+    public async Task<IEnumerable<ReadingGoal>> GetUpcomingDeadlinesAsync(int days = 7)
     {
-        throw new NotImplementedException();
+        IEnumerable<ReadingGoal> activeGoals = await _readingGoalRepository.GetActiveGoalsAsync();
+        DateTime cutoffDate = DateTime.Now.AddDays(days);
+
+        return activeGoals.Where(g => g.Deadline <= cutoffDate);
     }
 
     public Task<bool> IsGoalAchievedAsync(int goalId)

@@ -24,9 +24,9 @@ public class ReadingListService : IReadingListService
         return await _userBookRepository.GetBooksByStatusAsync(status);
     }
 
-    public Task<UserBook> GetCurrentlyReadingBookAsync()
+    public async Task<IEnumerable<UserBook>> GetCurrentlyReadingBooksAsync()
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.GetBooksByStatusAsync(ReadingStatus.CurrentlyReading);
     }
 
     public async Task<IEnumerable<UserBook>> GetMyReadingListAsync()
