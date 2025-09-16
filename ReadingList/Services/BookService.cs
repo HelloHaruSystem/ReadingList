@@ -1,5 +1,6 @@
 using ReadingList.Data;
 using ReadingList.Models;
+using ReadingList.Models.Enums;
 
 namespace ReadingList.Services;
 
@@ -17,12 +18,12 @@ public class BookService : IBookService
         return await _bookRepository.GetAllBooksAsync();
     }
 
-    public Task<IEnumerable<Book>> GetBooksByAuthorAsync(int authorId)
+    public async Task<IEnumerable<Book>> GetBooksBySubjectAsync(SubjectType subjectType)
     {
-        throw new NotImplementedException();
+        return await _bookRepository.GetBookBySubjectAsync((int)subjectType);
     }
 
-    public Task<IEnumerable<Book>> GetBooksBySubjectAsync(int subjectId)
+    public Task<IEnumerable<Book>> GetBooksByAuthorAsync(int authorId)
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,5 @@
 using ReadingList.Models;
+using ReadingList.Models.Enums;
 
 namespace ReadingList.Services;
 

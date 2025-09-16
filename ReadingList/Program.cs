@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using ReadingList.Data;
 using ReadingList.Models;
+using ReadingList.Models.Enums;
 using ReadingList.Services;
 using ReadingList.Views;
 using Terminal.Gui;
@@ -13,14 +14,17 @@ IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-IBookRepository bookRepository = new BookRepository(config);
-IBookService bookService = new BookService(bookRepository);
-
-List<Book> books = (await bookService.GetAllBooksAsync()).ToList();
-
-foreach (Book b in books) 
+if (!(config.GetConnectionString("DefaultConnection") == null))
 {
-    System.Console.Write("{0} ({1})\n", b.Title, b.PublicationYear);
+    IBookRepository bookRepository = new BookRepository(config);
+    IBookService bookService = new BookService(bookRepository);
+
+    List<Book> books = (await bookService.GetBooksBySubjectAsync(SubjectType.Algorithms)).ToList();
+
+    foreach (Book b in books) 
+    {
+        System.Console.Write("{0} ({1})\n", b.Title, b.PublicationYear);
+    }
 }
 
 /* crud goals

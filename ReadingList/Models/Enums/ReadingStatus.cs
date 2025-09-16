@@ -1,4 +1,4 @@
-namespace ReadingList.Models;
+namespace ReadingList.Models.Enums;
 
 public enum ReadingStatus : byte
 {

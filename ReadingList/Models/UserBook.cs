@@ -1,3 +1,5 @@
+using ReadingList.Models.Enums;
+
 namespace ReadingList.Models;
 
 public class UserBook
