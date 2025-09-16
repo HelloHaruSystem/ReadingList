@@ -1,4 +1,5 @@
 using ReadingList.Services;
+using ReadingList.Tui.Views;
 using Terminal.Gui;
 
 namespace ReadingList.Tui;
@@ -19,8 +20,8 @@ public class TuiApplication(IBookService bookService, IReadingListService readin
 
         top.Add(menu, statusBar);
 
-        // var mainView = new MainView(_bookService, _readingListService, _ReadingGoalService);
-        // top.Add(mainView);
+        var mainView = new MainView(_bookService, _readingListService, _ReadingGoalService);
+        top.Add(mainView);
 
         Application.Run();
         Application.Shutdown();

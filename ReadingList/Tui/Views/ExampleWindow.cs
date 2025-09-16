@@ -38,11 +38,11 @@ public class ExampleWindow : Window
         // Add controls to this window
         Add(hello, button);
     }
-    
+
     public void SetupApplication()
     {
         var top = Application.Top;
-        
+
         // Create a menu bar
         var menu = new MenuBar(new MenuBarItem[] {
             new MenuBarItem("_File", new MenuItem[] {
@@ -56,14 +56,14 @@ public class ExampleWindow : Window
                 new MenuItem("_Paste", "Paste text", null)
             })
         });
-        
+
         // Create a status bar
         var statusBar = new StatusBar(new StatusItem[] {
             new StatusItem(Key.F1, "~F1~ Help", null),
             new StatusItem(Key.F2, "~F2~ Save", null),
             new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => Application.RequestStop())
         });
-        
+
         // Add everything to the top level
         top.Add(menu, this, statusBar);
     }
