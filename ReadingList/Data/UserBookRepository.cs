@@ -1,7 +1,9 @@
+using System.Reflection.Metadata;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using ReadingList.Models;
 using ReadingList.Models.Enums;
+using ReadingList.Utils;
 
 namespace ReadingList.Data;
 
@@ -44,9 +46,58 @@ public class UserBookRepository : IUserBookRepository
         }
     }
 
-    public Task<IEnumerable<UserBook>> GetBooksByStatusAsync(ReadingStatus status)
+    public async Task<IEnumerable<UserBook>> GetBooksByStatusAsync(ReadingStatus status)
     {
-        throw new NotImplementedException();
+        List<UserBook> userBooks = new List<UserBook>();
+
+        const string sql = @"
+            SELECT 
+                ub.*,
+                b.title, b.publication_year, b.pages, b.description
+            FROM user_books AS ub
+            INNER JOIN books AS b
+            ON b.isbn = ub.book_isbn
+            WHERE ub.reading_status = @status
+            ORDER BY ub.updated_at DESC";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@status", status.ToString().ToLower());
+
+        try
+        {
+            await connection.OpenAsync();
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                userBooks.Add(new UserBook
+                {
+                    Id = SqlDataReaderHelper.GetInt(reader, "id"),
+                    BookISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
+                    Status = Enum.Parse<ReadingStatus>(SqlDataReaderHelper.GetString(reader, "reading_status"), true),
+                    PersonalRating = SqlDataReaderHelper.GetIntOrNull(reader, "personal_rating"),
+                    PersonalNotes = SqlDataReaderHelper.GetStringOrNull(reader, "personal_notes"),
+                    DateStarted = SqlDataReaderHelper.GetDateTime(reader, "date_started"),
+                    UpdatedAt = SqlDataReaderHelper.GetDateTime(reader, "updated_at"),
+                    Book = new Book
+                    {
+                        ISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
+                        Title = SqlDataReaderHelper.GetString(reader, "title"),
+                        PublicationYear = SqlDataReaderHelper.GetIntOrNull(reader, "publication_year"),
+                        Pages = SqlDataReaderHelper.GetIntOrNull(reader, "pages"),
+                        Description = SqlDataReaderHelper.GetStringOrNull(reader, "description")
+                    }
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+            return new List<UserBook>();
+        }
+
+        return userBooks;
     }
 
     public Task<IEnumerable<UserBook>> GetUserReadingListAsync()
@@ -54,9 +105,42 @@ public class UserBookRepository : IUserBookRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> RateBookAsync(int userBookId, int rating, string notes = null)
+    public async Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null)
     {
-        throw new NotImplementedException();
+        string sql = @"
+            UPDATE user_books
+            SET personal_rating = @rating, updated_at = @updatedAt";
+
+        if (notes != null)
+        {
+            sql += ", personal_notes = @notes";
+        }
+        sql += " WHERE id = @userBookId";
+
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@rating", rating);
+        command.Parameters.AddWithValue("@updatedAt", DateTime.Now);
+        command.Parameters.AddWithValue("@userBookId", userBookId);
+
+        if (notes != null)
+        {
+            command.Parameters.AddWithValue("@notes", notes);
+        }
+
+        try
+        {
+            await connection.OpenAsync();
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error rating book:\n{0}\n", ex.Message);
+            return false;
+        }
     }
 
     public Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus status)

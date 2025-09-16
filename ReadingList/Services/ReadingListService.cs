@@ -19,9 +19,9 @@ public class ReadingListService : IReadingListService
         return await _userBookRepository.AddToReadingListAsync(isbn, status);
     }
 
-    public Task<IEnumerable<UserBook>> GetBooksByStatusAsync(ReadingStatus status)
+    public async Task<IEnumerable<UserBook>> GetBooksByStatusAsync(ReadingStatus status)
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.GetBooksByStatusAsync(status);
     }
 
     public Task<UserBook> GetCurrentlyReadingBookAsync()
@@ -44,9 +44,9 @@ public class ReadingListService : IReadingListService
         throw new NotImplementedException();
     }
 
-    public Task<bool> RateBookAsync(int userBookId, int rating, string notes = null)
+    public async Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null)
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.RateBookAsync(userBookId, rating, notes);
     }
 
     public Task<bool> RemoveFromListAsync(int userBookId)
