@@ -3,6 +3,17 @@ using Terminal.Gui;
 
 Console.WriteLine("Hello, World!");
 
+
+// test crud stuff
+/* crud goals
+
+
+
+
+*/
+
+
+/* tui stuff
 Application.Init();
 
 try
@@ -16,3 +27,4 @@ finally
 {
     Application.Shutdown();
 }
+*/
