@@ -10,5 +10,5 @@ public class ReadingGoal
     public int? TargetBooks { get; set; }
     public int? TargetPages { get; set; }
     public bool IsCompleted { get; set; }
-    public required List<Book> Books { get; set; }
+    public List<Book> Books { get; set; }
 }
