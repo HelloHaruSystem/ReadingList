@@ -23,9 +23,9 @@ public class BookService : IBookService
         return await _bookRepository.GetBookBySubjectAsync((int)subjectType);
     }
 
-    public Task<IEnumerable<Book>> GetBooksByAuthorAsync(int authorId)
+    public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(int authorId)
     {
-        throw new NotImplementedException();
+        return await _bookRepository.GetBooksByAuthorAsync(authorId);
     }
 
     public async Task<Book?> GetBookWithDetailsAsync(string isbn)

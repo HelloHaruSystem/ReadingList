@@ -91,6 +91,48 @@ public class BookRepository : IBookRepository
         return booksOfSelectedSubject;
     }
 
+    public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(int authorID)
+    {
+        List<Book> booksByRequestedAuthor = new List<Book>();
+
+        const string sql = @"
+            SELECT b.*
+            FROM books AS b
+            INNER JOIN book_authors AS ba
+            ON ba.book_isbn = b.isbn
+            WHERE ba.author_id = @authorId";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@authorId", authorID);
+
+        try
+        {
+            await connection.OpenAsync();
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                booksByRequestedAuthor.Add(new Book
+                {
+                    ISBN = SqlDataReaderHelper.GetString(reader, "isbn"),
+                    Title = SqlDataReaderHelper.GetString(reader, "title"),
+                    PublicationYear = SqlDataReaderHelper.GetIntOrNull(reader, "publication_year"),
+                    Pages = SqlDataReaderHelper.GetIntOrNull(reader, "pages"),
+                    Description = SqlDataReaderHelper.GetStringOrNull(reader, "description")
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+            return new List<Book>();
+        }
+
+        return booksByRequestedAuthor;
+    }
+
     public async Task<Book?> GetWithDetailsAsync(string isbn)
     {
         Book? book = null;

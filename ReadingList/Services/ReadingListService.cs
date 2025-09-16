@@ -34,14 +34,14 @@ public class ReadingListService : IReadingListService
         return await _userBookRepository.GetUserReadingListAsync();
     }
 
-    public Task<IEnumerable<UserBook>> GetRecentlyCompletedBooksAsync(int count = 5)
+    public async Task<IEnumerable<UserBook>> GetRecentlyCompletedBooksAsync(int count = 5)
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.GetRecentlyCompletedBooksAsync(count);
     }
 
-    public Task<IEnumerable<UserBook>> GetTopRatedBooksAsync(int count = 10)
+    public async Task<IEnumerable<UserBook>> GetTopRatedBooksAsync(int count = 10)
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.GetTopRatedBooksAsync(count);
     }
 
     public async Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null)

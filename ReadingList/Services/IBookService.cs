@@ -10,5 +10,4 @@ public interface IBookService
     Task<IEnumerable<Book>> SearchBooksAsync(string searchTerm);
     Task<IEnumerable<Book>> GetBooksBySubjectAsync(SubjectType subjectType);
     Task<IEnumerable<Book>> GetBooksByAuthorAsync(int authorId);
-    Task<IEnumerable<Book>> GetRecentlyAddedBooksAsync(int count = 10);
 }
