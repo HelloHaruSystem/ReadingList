@@ -100,9 +100,56 @@ public class UserBookRepository : IUserBookRepository
         return userBooks;
     }
 
-    public Task<IEnumerable<UserBook>> GetUserReadingListAsync()
+    public async Task<IEnumerable<UserBook>> GetUserReadingListAsync()
     {
-        throw new NotImplementedException();
+        List<UserBook> userBooks = new List<UserBook>();
+
+        const string sql = @"
+            SELECT 
+                ub.*,
+                b.title, b.publication_year, b.pages, b.description
+            FROM user_books AS ub
+            INNER JOIN books AS b
+            ON b.isbn = ub.book_isbn
+            ORDER BY ub.updated_at DESC";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        try
+        {
+            await connection.OpenAsync();
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                userBooks.Add(new UserBook
+                {
+                    Id = SqlDataReaderHelper.GetInt(reader, "id"),
+                    BookISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
+                    Status = Enum.Parse<ReadingStatus>(SqlDataReaderHelper.GetString(reader, "reading_status"), true),
+                    PersonalRating = SqlDataReaderHelper.GetIntOrNull(reader, "personal_rating"),
+                    PersonalNotes = SqlDataReaderHelper.GetStringOrNull(reader, "personal_notes"),
+                    DateStarted = SqlDataReaderHelper.GetDateTime(reader, "date_started"),
+                    UpdatedAt = SqlDataReaderHelper.GetDateTime(reader, "updated_at"),
+                    Book = new Book
+                    {
+                        ISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
+                        Title = SqlDataReaderHelper.GetString(reader, "title"),
+                        PublicationYear = SqlDataReaderHelper.GetIntOrNull(reader, "publication_year"),
+                        Pages = SqlDataReaderHelper.GetIntOrNull(reader, "pages"),
+                        Description = SqlDataReaderHelper.GetStringOrNull(reader, "description")
+                    }
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+            return new List<UserBook>();
+        }
+
+        return userBooks;
     }
 
     public async Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null)

@@ -29,9 +29,9 @@ public class ReadingListService : IReadingListService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<UserBook>> GetMyReadingListAsync()
+    public async Task<IEnumerable<UserBook>> GetMyReadingListAsync()
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.GetUserReadingListAsync();
     }
 
     public Task<IEnumerable<UserBook>> GetRecentlyCompletedBooksAsync(int count = 5)
