@@ -2,6 +2,7 @@ using Terminal.Gui;
 
 namespace ReadingList.Tui.Views;
 
+[Obsolete]
 public class ExampleWindow : Window
 {
     public ExampleWindow() : base("Example tui window")
@@ -45,7 +46,7 @@ public class ExampleWindow : Window
 
         // Create a menu bar
         var menu = new MenuBar(new MenuBarItem[] {
-            new MenuBarItem("_File", new MenuItem[] {
+            new MenuBarItem("_File", new MenuItem?[] {
                 new MenuItem("_New", "Creates new file", null),
                 new MenuItem("_Open", "Opens a file", null),
                 null, // separator
