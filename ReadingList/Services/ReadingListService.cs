@@ -49,9 +49,9 @@ public class ReadingListService : IReadingListService
         return await _userBookRepository.RateBookAsync(userBookId, rating, notes);
     }
 
-    public Task<bool> RemoveFromListAsync(int userBookId)
+    public async Task<bool> RemoveFromListAsync(int userBookId)
     {
-        throw new NotImplementedException();
+        return await _userBookRepository.RemoveFromListAsync(userBookId);
     }
 
     public async Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus newStatus)

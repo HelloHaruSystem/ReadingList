@@ -190,6 +190,31 @@ public class UserBookRepository : IUserBookRepository
         }
     }
 
+    public async Task<bool> RemoveFromListAsync(int userBookId)
+    {
+        const string sql = @"
+            DELETE FROM user_books
+            WHERE id = @userBookId";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@userBookId", userBookId);
+
+        try
+        {
+            await connection.OpenAsync();
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error deleting book from list:.\n{0}\n", ex.Message);
+            return false;
+        }
+    }
+
     public async Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus status)
     {
         const string sql = @"

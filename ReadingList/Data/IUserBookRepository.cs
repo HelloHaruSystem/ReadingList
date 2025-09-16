@@ -10,4 +10,5 @@ public interface IUserBookRepository
     Task<int> AddToReadingListAsync(string isbn, ReadingStatus status = ReadingStatus.ToRead);
     Task<bool> UpdateReadingStatusAsync(int userBookId, ReadingStatus status);
     Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null);            
+    Task<bool> RemoveFromListAsync(int userBookId);
 }
