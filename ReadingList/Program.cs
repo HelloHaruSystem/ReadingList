@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using ReadingList.Data;
+using ReadingList.Services;
+using ReadingList.Tui;
 using ReadingList.Tui.Views;
 using Terminal.Gui;
-
-IConfigurationRoot config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
-
 
 /* crud goals
 
@@ -21,18 +19,29 @@ IConfigurationRoot config = new ConfigurationBuilder()
 
 */
 
+// TODO: add invertion of controll container if I have time
+// dependencies
+// confg
+IConfigurationRoot config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
-// tui stuff
-Application.Init();
+// repositories
+IBookRepository bookRepo = new BookRepository(config);
+IUserBookRepository userBookRepo = new UserBookRepository(config);
+IReadingGoalRepository readingGoalRepo = new ReadingGoalRepository(config);
 
-try
-{
-    ExampleWindow exampleWindow = new ExampleWindow();
-    exampleWindow.SetupApplication();
+// services
+IBookService bookService = new BookService(bookRepo);
+IReadingListService readingListService = new ReadingListService(userBookRepo);
+IReadingGoalService readingGoalService = new ReadingGoalService(readingGoalRepo);
 
-    Application.Run();
-}
-finally
-{
-    Application.Shutdown();
-}
+// create and start tui app
+TuiApplication tuiApp = new TuiApplication(
+    bookService,
+    readingListService,
+    readingGoalService
+);
+
+// Run the App
+tuiApp.Run();
