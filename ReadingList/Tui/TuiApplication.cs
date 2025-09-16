@@ -15,6 +15,9 @@ public class TuiApplication(IBookService bookService, IReadingListService readin
         Application.Init();
         Toplevel top = Application.Top;
 
+        // Apply a built-in color scheme to the entire TUI
+        top.ColorScheme = Colors.Base;
+
         MenuBar menu = CreateTopMenu();
         StatusBar statusBar = CreateStatusBar();
 

@@ -49,8 +49,11 @@ public class MainView : Window
 
         ListView menuList = new ListView(menuOptions)
         {
-            Width = Dim.Fill(),
-            Height = Dim.Fill()
+            X = Pos.Center(),
+            Y = Pos.Center(),
+
+            Width = 25,
+            Height = menuOptions.Length
         };
 
         // handle menu selection
