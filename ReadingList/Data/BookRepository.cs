@@ -172,8 +172,55 @@ public class BookRepository : IBookRepository
         }
     }
 
-    public Task<IEnumerable<Book>> SearchBooksAsync(string searchTerm)
+    public async Task<IEnumerable<Book>> SearchBooksAsync(string searchTerm)
     {
-        throw new NotImplementedException();
+        List<Book> books = new List<Book>();
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return books;
+        }
+
+        const string sql = @"
+            SELECT DISTINCT b.*
+            FROM books AS b
+            LEFT JOIN book_authors AS ba ON ba.book_isbn = b.isbn
+            LEFT JOIN authors AS a ON a.id = ba.author_id
+            LEFT JOIN book_subjects AS bs ON bs.book_isbn = b.isbn
+            LEFT JOIN subjects AS s ON s.id = bs.subject_id
+            WHERE 
+                b.title LIKE @searchTerm OR
+                b.description LIKE @searchTerm OR
+                a.full_name LIKE @searchTerm OR
+                s.subject_name LIKE @searchTerm
+            ORDER BY b.title";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
+
+        try
+        {
+            await connection.OpenAsync();
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                books.Add(new Book
+                {
+                    ISBN = SqlDataReaderHelper.GetString(reader, "isbn"),
+                    Title = SqlDataReaderHelper.GetString(reader, "title"),
+                    PublicationYear = SqlDataReaderHelper.GetIntOrNull(reader, "publication_year"),
+                    Pages = SqlDataReaderHelper.GetIntOrNull(reader, "pages"),
+                    Description = SqlDataReaderHelper.GetStringOrNull(reader, "description")
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+        }
+
+        return books;
     }
 }

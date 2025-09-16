@@ -19,7 +19,7 @@ if (!(config.GetConnectionString("DefaultConnection") == null))
     IBookRepository bookRepository = new BookRepository(config);
     IBookService bookService = new BookService(bookRepository);
 
-    List<Book> books = (await bookService.GetBooksBySubjectAsync(SubjectType.Algorithms)).ToList();
+    List<Book> books = (await bookService.SearchBooksAsync("programming")).ToList();
 
     foreach (Book b in books)
     {

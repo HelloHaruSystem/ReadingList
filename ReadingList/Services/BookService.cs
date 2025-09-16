@@ -38,8 +38,8 @@ public class BookService : IBookService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Book>> SearchBooksAsync(string searchTerm)
+    public async Task<IEnumerable<Book>> SearchBooksAsync(string searchTerm)
     {
-        throw new NotImplementedException();
+        return await _bookRepository.SearchBooksAsync(searchTerm);
     }
 }
