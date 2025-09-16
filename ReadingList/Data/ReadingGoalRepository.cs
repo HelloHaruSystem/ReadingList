@@ -1,5 +1,7 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using ReadingList.Models;
+using ReadingList.Utils;
 
 namespace ReadingList.Data;
 
@@ -12,23 +14,127 @@ public class ReadingGoalRepository : IReadingGoalRepository
         _connectionString = configuration.GetConnectionString("DefaultConnection");
     }
 
-    public Task<bool> AddBookToGoalAsync(int goalId, string isbn)
+    public async Task<bool> AddBookToGoalAsync(int goalId, string isbn)
     {
-        throw new NotImplementedException();
+        const string sql = @"
+            INSERT INTO goal_books (goal_id, book_isbn)
+            VALUES
+                (@goalId, @isbn)";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@goalId", goalId);
+        command.Parameters.AddWithValue("@isbn", isbn);
+
+        try
+        {
+            await connection.OpenAsync();
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error adding book to goal:\n{0}\n", ex.Message);
+            return false;
+        }
     }
 
-    public Task<int> CreateGoalAsync(ReadingGoal goal)
+    public async Task<int> CreateGoalAsync(ReadingGoal goal)
     {
-        throw new NotImplementedException();
+        const string sql = @"
+            INSERT INTO reading_goals (goal_name, description, start_date, deadline, target_books, target_pages)
+            OUTPUT INSERTED.id
+            VALUES
+                (@goalName, @description, @startDate, @deadline, @targetBooks, @targetPages)";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@goalName", goal.GoalName);
+        SqlCommandHelper.AddParameterWithNullCheck(command, "@description", goal.Description);
+        command.Parameters.AddWithValue("@startDate", goal.StartDate);
+        command.Parameters.AddWithValue("@deadline", goal.Deadline);
+        SqlCommandHelper.AddParameterWithNullCheck(command, "@targetBooks", goal.TargetBooks);
+        SqlCommandHelper.AddParameterWithNullCheck(command, "@targetPages", goal.TargetPages);
+
+        try
+        {
+            await connection.OpenAsync();
+            var result = await command.ExecuteScalarAsync();
+            return Convert.ToInt32(result);
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+            return -1;
+        }
     }
 
-    public Task<IEnumerable<ReadingGoal>> GetActiveGoalsAsync()
+    public async Task<IEnumerable<ReadingGoal>> GetActiveGoalsAsync()
     {
-        throw new NotImplementedException();
+        List<ReadingGoal> activeGoals = new List<ReadingGoal>();
+
+        const string sql = @"
+            SELECT *
+            FROM reading_goals
+            WHERE is_completed = 0
+            ORDER BY deadline ASC";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        try
+        {
+            await connection.OpenAsync();
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                activeGoals.Add(new ReadingGoal
+                {
+                    Id = SqlDataReaderHelper.GetInt(reader, "id"),
+                    GoalName = SqlDataReaderHelper.GetString(reader, "goal_name"),
+                    Description = SqlDataReaderHelper.GetStringOrNull(reader, "description"),
+                    StartDate = SqlDataReaderHelper.GetDateTime(reader, "start_date"),
+                    Deadline = SqlDataReaderHelper.GetDateTime(reader, "deadline"),
+                    TargetBooks = SqlDataReaderHelper.GetIntOrNull(reader, "target_books"),
+                    TargetPages = SqlDataReaderHelper.GetIntOrNull(reader, "target_pages"),
+                    IsCompleted = SqlDataReaderHelper.GetBool(reader, "is_completed")
+                });
+            }
+        }
+        catch (Exception ex) {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+            return new List<ReadingGoal>();
+        }
+
+        return activeGoals;
     }
 
-    public Task<bool> MarkGoalCompleteAsync(int goalId)
+    public async Task<bool> MarkGoalCompleteAsync(int goalId)
     {
-        throw new NotImplementedException();
+        const string sql = @"
+            UPDATE reading_goals
+            SET is_completed = 1
+            WHERE id = @goalId";
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        using SqlCommand command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@goalId", goalId);
+
+        try
+        {
+            await connection.OpenAsync();
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Error fetching from DB:\n{0}\n", ex.Message);
+            return false;
+        }
     }
 }
