@@ -18,9 +18,9 @@ public class ReadingGoalsView : BaseView
     private ReadingGoal? _selectedGoal;
 
     public ReadingGoalsView(
+        NavigationManager navigationManager,
         IReadingGoalService readingGoalService,
-        IBookService bookService,
-        NavigationManager navigationManager) 
+        IBookService bookService) 
         : base("Reading Goals")
     {
         _readingGoalService = readingGoalService;

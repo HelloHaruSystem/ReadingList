@@ -8,18 +8,13 @@ namespace ReadingList.Tui.Views;
 public class BrowseBooksView : BaseView
 {
     private readonly IBookService _bookService;
-    private readonly NavigationManager _navigationManager;
-    private ListView _booksListView;
-    private List<Book> _books;
+    private readonly ListView _booksListView = new ListView();
+    private List<Book> _books = new List<Book>();
 
-    public BrowseBooksView(
-        IBookService bookService,
-        NavigationManager navigationManager) 
-        : base("Browse All Books")
+    public BrowseBooksView(NavigationManager navigationManager, IBookService bookService) 
+        : base("Browse All Books", navigationManager)
     {
         _bookService = bookService;
-        _navigationManager = navigationManager;
-        _books = new List<Book>();
 
         SetNavigationManager(navigationManager);
         SetupUI();
@@ -27,15 +22,11 @@ public class BrowseBooksView : BaseView
 
     protected override void SetupUI()
     {
-        // Create books list view
-        _booksListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 4
-        };
-
+        // init listView fields
+        _booksListView.X = 1;
+        _booksListView.Y = 1;
+        _booksListView.Width = Dim.Fill() - 2;
+        _booksListView.Height = Dim.Fill() - 4;
         _booksListView.OpenSelectedItem += OnBookSelected;
 
         // Create back button

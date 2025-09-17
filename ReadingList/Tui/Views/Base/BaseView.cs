@@ -4,10 +4,13 @@ namespace ReadingList.Tui.Views.Base;
 
 public abstract class BaseView : Window
 {
-    protected NavigationManager? _navigationManager;
+    protected readonly NavigationManager _navigationManager;
 
-    protected BaseView(string title) : base(title)
+    protected BaseView(string title, NavigationManager navigationManager) : base(title)
     {
+        _navigationManager = navigationManager
+            ?? throw new ArgumentNullException(nameof(navigationManager));
+
         X = 0;
         Y = 1;
         Width = Dim.Fill();

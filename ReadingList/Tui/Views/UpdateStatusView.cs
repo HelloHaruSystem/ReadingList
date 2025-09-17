@@ -18,8 +18,8 @@ public class UpdateStatusView : BaseView
     private UserBook? _selectedBook;
 
     public UpdateStatusView(
-        IReadingListService readingListService,
-        NavigationManager navigationManager) 
+        NavigationManager navigationManager,
+        IReadingListService readingListService) 
         : base("Update Reading Status")
     {
         _readingListService = readingListService;

@@ -20,9 +20,9 @@ public class AddBookView : BaseView
     private Book? _selectedBook;
 
     public AddBookView(
+        NavigationManager navigationManager,
         IBookService bookService,
-        IReadingListService readingListService,
-        NavigationManager navigationManager) 
+        IReadingListService readingListService) 
         : base("Add Book to Reading List")
     {
         _bookService = bookService;

@@ -1,4 +1,4 @@
-using ReadingList.Tui.Views.Base;
+using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 
 namespace ReadingList.Tui.Views.Base;
@@ -7,10 +7,17 @@ public class NavigationManager
 {
     private readonly Stack<BaseView> _viewStack = new();
     private readonly Toplevel _top;
+    private readonly IServiceProvider _serviceProvider;
 
-    public NavigationManager(Toplevel top)
+    public NavigationManager(IServiceProvider serviceProvider)
     {
-        _top = top;
+        _top = Application.Top;
+        _serviceProvider = serviceProvider;
+    }
+
+    public T GetView<T>() where T : BaseView
+    {
+        return _serviceProvider.GetRequiredService<T>();
     }
 
     public void NavigateTo(BaseView view)

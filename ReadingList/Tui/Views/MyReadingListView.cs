@@ -16,8 +16,8 @@ public class MyReadingListView : BaseView
     private ReadingStatus? _currentFilter;
 
     public MyReadingListView(
-        IReadingListService readingListService,
-        NavigationManager navigationManager) 
+        NavigationManager navigationManager,
+        IReadingListService readingListService) 
         : base("My Reading List")
     {
         _readingListService = readingListService;

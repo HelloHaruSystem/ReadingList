@@ -7,18 +7,11 @@ namespace ReadingList.Tui;
 
 public class TuiApplication
 {
-    private readonly IBookService _bookService;
-    private readonly IReadingListService _readingListService;
-    private readonly IReadingGoalService _readingGoalService;
+    private readonly NavigationManager _navigationManager;
 
-    public TuiApplication(
-        IBookService bookService,
-        IReadingListService readingListService,
-        IReadingGoalService readingGoalService)
+    public TuiApplication(NavigationManager navigationManager)
     {
-        _bookService = bookService;
-        _readingListService = readingListService;
-        _readingGoalService = readingGoalService;
+        _navigationManager = navigationManager;
     }
 
     public void Run()
@@ -29,24 +22,13 @@ public class TuiApplication
         // Apply color scheme
         top.ColorScheme = Colors.Base;
 
-        // Create navigation manager
-        NavigationManager navigationManager = new NavigationManager(top);
-
-        // Create main menu view
-        MainMenuView mainMenuView = new MainMenuView(
-            _bookService,
-            _readingListService, 
-            _readingGoalService,
-            navigationManager);
-
         // Setup top-level UI
         MenuBar menu = CreateTopMenu();
         StatusBar statusBar = CreateStatusBar();
-
         top.Add(menu, statusBar);
 
-        // Start navigation with main menu
-        navigationManager.NavigateTo(mainMenuView);
+        MainMenuView mainMenuView = _navigationManager.GetView<MainMenuView>();
+        _navigationManager.NavigateTo(mainMenuView);
 
         Application.Run();
         Application.Shutdown();

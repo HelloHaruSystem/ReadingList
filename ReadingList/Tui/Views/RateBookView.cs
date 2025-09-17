@@ -20,8 +20,8 @@ public class RateBookView : BaseView
     private UserBook? _selectedBook;
 
     public RateBookView(
-        IReadingListService readingListService,
-        NavigationManager navigationManager) 
+        NavigationManager navigationManager,
+        IReadingListService readingListService) 
         : base("Rate a Book")
     {
         _readingListService = readingListService;

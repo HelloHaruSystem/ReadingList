@@ -19,9 +19,9 @@ public class StatisticsView : BaseView
     private List<UserBook> _topRatedBooks;
 
     public StatisticsView(
+        NavigationManager navigationManager,
         IReadingListService readingListService,
-        IReadingGoalService readingGoalService,
-        NavigationManager navigationManager) 
+        IReadingGoalService readingGoalService) 
         : base("Reading Statistics")
     {
         _readingListService = readingListService;

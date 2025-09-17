@@ -7,24 +7,10 @@ namespace ReadingList.Tui.Views;
 
 public class MainMenuView : BaseView
 {
-    private readonly IBookService _bookService;
-    private readonly IReadingListService _readingListService;
-    private readonly IReadingGoalService _readingGoalService;
-    private readonly NavigationManager _navigationManager;
-
-    public MainMenuView(
-        IBookService bookService,
-        IReadingListService readingListService,
-        IReadingGoalService readingGoalService,
-        NavigationManager navigationManager) 
-        : base("Reading List - Main Menu")
+    public MainMenuView(NavigationManager navigationmanager)
+        : base("Reading List - Main Menu", navigationmanager)
     {
-        _bookService = bookService;
-        _readingListService = readingListService;
-        _readingGoalService = readingGoalService;
-        _navigationManager = navigationManager;
-
-        SetNavigationManager(navigationManager);
+        SetNavigationManager(_navigationManager);
         SetupUI();
     }
 
@@ -108,49 +94,49 @@ public class MainMenuView : BaseView
     // Navigation methods
     private void NavigateToBrowseBooksView()
     {
-        BrowseBooksView browseBooksView = new BrowseBooksView(_bookService, _navigationManager);
+        BrowseBooksView browseBooksView = _navigationManager.GetView<BrowseBooksView>();
         _navigationManager.NavigateTo(browseBooksView);
     }
 
     private void NavigateToSearchBooksView()
     {
-        SearchBooksView searchBooksView = new SearchBooksView(_bookService, _navigationManager);
+        SearchBooksView searchBooksView = _navigationManager.GetView<SearchBooksView>();
         _navigationManager.NavigateTo(searchBooksView);
     }
 
     private void NavigateToMyReadingListView()
     {
-        MyReadingListView myReadingListView = new MyReadingListView(_readingListService, _navigationManager);
+        MyReadingListView myReadingListView = _navigationManager.GetView<MyReadingListView>();
         _navigationManager.NavigateTo(myReadingListView);
     }
 
     private void NavigateToAddBookView()
     {
-        AddBookView addBookView = new AddBookView(_bookService, _readingListService, _navigationManager);
+        AddBookView addBookView = _navigationManager.GetView<AddBookView>();
         _navigationManager.NavigateTo(addBookView);
     }
 
     private void NavigateToUpdateStatusView()
     {
-        UpdateStatusView updateStatusView = new UpdateStatusView(_readingListService, _navigationManager);
+        UpdateStatusView updateStatusView = _navigationManager.GetView<UpdateStatusView>();
         _navigationManager.NavigateTo(updateStatusView);
     }
 
     private void NavigateToRateBookView()
     {
-        RateBookView rateBookView = new RateBookView(_readingListService, _navigationManager);
+        RateBookView rateBookView = _navigationManager.GetView<RateBookView>();
         _navigationManager.NavigateTo(rateBookView);
     }
 
     private void NavigateToReadingGoalsView()
     {
-        ReadingGoalsView readingGoalsView = new ReadingGoalsView(_readingGoalService, _bookService, _navigationManager);
-    _navigationManager.NavigateTo(readingGoalsView);
+        ReadingGoalsView readingGoalsView = _navigationManager.GetView<ReadingGoalsView>();
+        _navigationManager.NavigateTo(readingGoalsView);
     }
 
     private void NavigateToStatisticsView()
     {
-        StatisticsView statisticsView = new StatisticsView(_readingListService, _readingGoalService, _navigationManager);
+        StatisticsView statisticsView = _navigationManager.GetView<StatisticsView>();
         _navigationManager.NavigateTo(statisticsView);
     }
 }

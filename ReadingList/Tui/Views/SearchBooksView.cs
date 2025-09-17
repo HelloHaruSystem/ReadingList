@@ -15,8 +15,8 @@ public class SearchBooksView : BaseView
     private List<Book> _searchResults;
 
     public SearchBooksView(
-        IBookService bookService,
-        NavigationManager navigationManager) 
+        NavigationManager navigationManager,
+        IBookService bookService) 
         : base("Search Books")
     {
         _bookService = bookService;
