@@ -10,26 +10,23 @@ public class StatisticsView : BaseView
 {
     private readonly IReadingListService _readingListService;
     private readonly IReadingGoalService _readingGoalService;
-    private readonly NavigationManager _navigationManager;
-    private Label _overviewLabel;
-    private Label _statusBreakdownLabel;
-    private Label _recentActivityLabel;
-    private Label _goalsLabel;
-    private ListView _topRatedListView;
+    private readonly Label _overviewLabel = new Label();
+    private readonly Label _statusBreakdownLabel = new Label();
+    private readonly Label _recentActivityLabel = new Label();
+    private readonly Label _goalsLabel = new Label();
+    private readonly ListView _topRatedListView = new ListView();
     private List<UserBook> _topRatedBooks;
 
     public StatisticsView(
         NavigationManager navigationManager,
         IReadingListService readingListService,
         IReadingGoalService readingGoalService) 
-        : base("Reading Statistics")
+        : base("Reading Statistics", navigationManager)
     {
         _readingListService = readingListService;
         _readingGoalService = readingGoalService;
-        _navigationManager = navigationManager;
         _topRatedBooks = new List<UserBook>();
-
-        SetNavigationManager(navigationManager);
+        
         SetupUI();
     }
 
@@ -44,13 +41,10 @@ public class StatisticsView : BaseView
             Height = 6
         };
 
-        _overviewLabel = new Label("Loading statistics...")
-        {
-            X = 1,
-            Y = 0,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 1
-        };
+        _overviewLabel.X = 1;
+        _overviewLabel.Y = 0;
+        _overviewLabel.Width = Dim.Fill() - 2;
+        _overviewLabel.Height = Dim.Fill() - 1;
 
         overviewFrame.Add(_overviewLabel);
 
@@ -63,13 +57,10 @@ public class StatisticsView : BaseView
             Height = 8
         };
 
-        _statusBreakdownLabel = new Label("Loading...")
-        {
-            X = 1,
-            Y = 0,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 1
-        };
+        _statusBreakdownLabel.X = 1;
+        _statusBreakdownLabel.Y = 0;
+        _statusBreakdownLabel.Width = Dim.Fill() - 2;
+        _statusBreakdownLabel.Height = Dim.Fill() - 1;
 
         statusFrame.Add(_statusBreakdownLabel);
 
@@ -82,13 +73,10 @@ public class StatisticsView : BaseView
             Height = 8
         };
 
-        _goalsLabel = new Label("Loading...")
-        {
-            X = 1,
-            Y = 0,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 1
-        };
+        _goalsLabel.X = 1;
+        _goalsLabel.Y = 0;
+        _goalsLabel.Width = Dim.Fill() - 2;
+        _goalsLabel.Height = Dim.Fill() - 1;
 
         goalsFrame.Add(_goalsLabel);
 
@@ -107,13 +95,10 @@ public class StatisticsView : BaseView
             Y = 0
         };
 
-        _topRatedListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _topRatedListView.X = 1;
+        _topRatedListView.Y = 1;
+        _topRatedListView.Width = Dim.Fill() - 2;
+        _topRatedListView.Height = Dim.Fill() - 2;
 
         _topRatedListView.OpenSelectedItem += OnTopRatedBookSelected;
 
@@ -128,13 +113,10 @@ public class StatisticsView : BaseView
             Height = 10
         };
 
-        _recentActivityLabel = new Label("Loading...")
-        {
-            X = 1,
-            Y = 0,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 1
-        };
+        _recentActivityLabel.X = 1;
+        _recentActivityLabel.Y = 0;
+        _recentActivityLabel.Width = Dim.Fill() - 2;
+        _recentActivityLabel.Height = Dim.Fill() - 1;
 
         recentFrame.Add(_recentActivityLabel);
 
@@ -191,7 +173,7 @@ public class StatisticsView : BaseView
             var activeGoals = activeGoalsTask.Result.ToList();
 
             // Update overview statistics
-            await UpdateOverviewStatistics(allBooks);
+            UpdateOverviewStatistics(allBooks);
 
             // Update status breakdown
             UpdateStatusBreakdown(allBooks);
@@ -213,7 +195,7 @@ public class StatisticsView : BaseView
         }
     }
 
-    private async Task UpdateOverviewStatistics(List<UserBook> allBooks)
+    private void UpdateOverviewStatistics(List<UserBook> allBooks)
     {
         int totalBooks = allBooks.Count;
         int completedBooks = allBooks.Count(b => b.Status == ReadingStatus.Completed);
@@ -222,11 +204,11 @@ public class StatisticsView : BaseView
         // Calculate total pages read (only for completed books with page counts)
         int totalPagesRead = allBooks
             .Where(b => b.Status == ReadingStatus.Completed && b.Book.Pages.HasValue)
-            .Sum(b => b.Book.Pages.Value);
+            .Sum(b => b.Book.Pages.GetValueOrDefault());
 
         // Calculate average rating
         var ratedBooks = allBooks.Where(b => b.PersonalRating.HasValue).ToList();
-        double averageRating = ratedBooks.Any() ? ratedBooks.Average(b => b.PersonalRating.Value) : 0;
+        double averageRating = ratedBooks.Any() ? ratedBooks.Average(b => b.PersonalRating.GetValueOrDefault()) : 0;
 
         string overviewText = $"Total Books in List: {totalBooks}\n";
         overviewText += $"Books Completed: {completedBooks}\n";
