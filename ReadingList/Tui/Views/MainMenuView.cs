@@ -1,3 +1,4 @@
+using Readinglist.Tui.Views;
 using ReadingList.Services;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
@@ -108,7 +109,8 @@ public class MainMenuView : BaseView
 
     private void NavigateToMyReadingListView()
     {
-        ShowMessage("Info", "My Reading List view - Coming next!");
+        MyReadingListView myReadingListView = new MyReadingListView(_readingListService, _navigationManager);
+        _navigationManager.NavigateTo(myReadingListView);
     }
 
     private void NavigateToAddBookView()

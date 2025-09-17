@@ -27,7 +27,7 @@ public class UserBookRepository : IUserBookRepository
         using SqlCommand command = new SqlCommand(sql, connection);
 
         command.Parameters.AddWithValue("@isbn", isbn);
-        command.Parameters.AddWithValue("@status", status.ToString().ToLower());
+        command.Parameters.AddWithValue("@status", EnumParsing.ConvertReadingStatusToDatabase(status));
         command.Parameters.AddWithValue("@dateStarted", DateTime.Now);
         command.Parameters.AddWithValue("@updatedAt", DateTime.Now);
 
@@ -61,7 +61,7 @@ public class UserBookRepository : IUserBookRepository
 
         using SqlConnection connection = new SqlConnection(_connectionString);
         using SqlCommand command = new SqlCommand(sql, connection);
-        command.Parameters.AddWithValue("@status", status.ToString().ToLower());
+        command.Parameters.AddWithValue("@status", EnumParsing.ConvertReadingStatusToDatabase(status));
 
         try
         {
@@ -74,7 +74,7 @@ public class UserBookRepository : IUserBookRepository
                 {
                     Id = SqlDataReaderHelper.GetInt(reader, "id"),
                     BookISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
-                    Status = Enum.Parse<ReadingStatus>(SqlDataReaderHelper.GetString(reader, "reading_status"), true),
+                    Status = EnumParsing.ParseReadingStatusFromDatabase(SqlDataReaderHelper.GetString(reader, "reading_status")),
                     PersonalRating = SqlDataReaderHelper.GetIntOrNull(reader, "personal_rating"),
                     PersonalNotes = SqlDataReaderHelper.GetStringOrNull(reader, "personal_notes"),
                     DateStarted = SqlDataReaderHelper.GetDateTime(reader, "date_started"),
@@ -117,7 +117,7 @@ public class UserBookRepository : IUserBookRepository
         using SqlCommand command = new SqlCommand(sql, connection);
 
         command.Parameters.AddWithValue("@count", count);
-        command.Parameters.AddWithValue("@status", ReadingStatus.Completed.ToString().ToLower());
+        command.Parameters.AddWithValue("@status", EnumParsing.ConvertReadingStatusToDatabase(ReadingStatus.Completed));
         
         try
         {
@@ -130,7 +130,7 @@ public class UserBookRepository : IUserBookRepository
                 {
                     Id = SqlDataReaderHelper.GetInt(reader, "id"),
                     BookISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
-                    Status = Enum.Parse<ReadingStatus>(SqlDataReaderHelper.GetString(reader, "reading_status"), true),
+                    Status = EnumParsing.ParseReadingStatusFromDatabase(SqlDataReaderHelper.GetString(reader, "reading_status")),
                     PersonalRating = SqlDataReaderHelper.GetIntOrNull(reader, "personal_rating"),
                     PersonalNotes = SqlDataReaderHelper.GetStringOrNull(reader, "personal_notes"),
                     DateStarted = SqlDataReaderHelper.GetDateTime(reader, "date_started"),
@@ -187,7 +187,7 @@ public class UserBookRepository : IUserBookRepository
                 {
                     Id = SqlDataReaderHelper.GetInt(reader, "id"),
                     BookISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
-                    Status = Enum.Parse<ReadingStatus>(SqlDataReaderHelper.GetString(reader, "reading_status"), true),
+                    Status = EnumParsing.ParseReadingStatusFromDatabase(SqlDataReaderHelper.GetString(reader, "reading_status")),
                     PersonalRating = SqlDataReaderHelper.GetIntOrNull(reader, "personal_rating"),
                     PersonalNotes = SqlDataReaderHelper.GetStringOrNull(reader, "personal_notes"),
                     DateStarted = SqlDataReaderHelper.GetDateTime(reader, "date_started"),
@@ -239,7 +239,7 @@ public class UserBookRepository : IUserBookRepository
                 {
                     Id = SqlDataReaderHelper.GetInt(reader, "id"),
                     BookISBN = SqlDataReaderHelper.GetString(reader, "book_isbn"),
-                    Status = Enum.Parse<ReadingStatus>(SqlDataReaderHelper.GetString(reader, "reading_status"), true),
+                    Status = EnumParsing.ParseReadingStatusFromDatabase(SqlDataReaderHelper.GetString(reader, "reading_status")),
                     PersonalRating = SqlDataReaderHelper.GetIntOrNull(reader, "personal_rating"),
                     PersonalNotes = SqlDataReaderHelper.GetStringOrNull(reader, "personal_notes"),
                     DateStarted = SqlDataReaderHelper.GetDateTime(reader, "date_started"),
@@ -337,7 +337,7 @@ public class UserBookRepository : IUserBookRepository
         using SqlConnection connection = new SqlConnection(_connectionString);
         using SqlCommand command = new SqlCommand(sql, connection);
 
-        command.Parameters.AddWithValue("@status", status.ToString().ToLower());
+        command.Parameters.AddWithValue("@status", EnumParsing.ConvertReadingStatusToDatabase(status));
         command.Parameters.AddWithValue("@updatedAt", DateTime.Now);
         command.Parameters.AddWithValue("@userBookId", userBookId);
 
