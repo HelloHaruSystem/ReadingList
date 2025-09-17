@@ -1,4 +1,3 @@
-using ReadingList.Models;
 using ReadingList.Services;
 using Terminal.Gui;
 
