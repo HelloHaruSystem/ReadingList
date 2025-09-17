@@ -9,26 +9,23 @@ namespace ReadingList.Tui.Views;
 public class RateBookView : BaseView
 {
     private readonly IReadingListService _readingListService;
-    private readonly NavigationManager _navigationManager;
-    private ListView _booksListView;
-    private ComboBox _ratingCombo;
-    private TextView _notesTextView;
-    private Label _booksLabel;
-    private Label _selectedBookLabel;
-    private Label _currentRatingLabel;
+    private readonly ListView _booksListView = new ListView();
+    private readonly ComboBox _ratingCombo = new ComboBox();
+    private readonly TextView _notesTextView = new TextView();
+    private readonly Label _booksLabel = new Label();
+    private readonly Label _selectedBookLabel = new Label("No book selected");
+    private readonly Label _currentRatingLabel = new Label("");
     private List<UserBook> _userBooks;
     private UserBook? _selectedBook;
 
     public RateBookView(
         NavigationManager navigationManager,
         IReadingListService readingListService) 
-        : base("Rate a Book")
+        : base("Rate a Book", navigationManager)
     {
         _readingListService = readingListService;
-        _navigationManager = navigationManager;
         _userBooks = new List<UserBook>();
 
-        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
@@ -43,19 +40,13 @@ public class RateBookView : BaseView
             Height = 10
         };
 
-        _booksLabel = new Label("Select a book to rate:")
-        {
-            X = 1,
-            Y = 0
-        };
+        _booksLabel.X = 1;
+        _booksLabel.Y = 0;
 
-        _booksListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _booksListView.X = 1;
+        _booksListView.Y = 1;
+        _booksListView.Width = Dim.Fill() - 2;
+        _booksListView.Height = Dim.Fill() - 2;
 
         _booksListView.SelectedItemChanged += OnBookHighlighted;
         _booksListView.OpenSelectedItem += OnBookSelected;
@@ -71,17 +62,11 @@ public class RateBookView : BaseView
             Height = 18
         };
 
-        _selectedBookLabel = new Label("No book selected")
-        {
-            X = 1,
-            Y = 0
-        };
+        _selectedBookLabel.X = 1;
+        _selectedBookLabel.Y = 0;
 
-        _currentRatingLabel = new Label("")
-        {
-            X = 1,
-            Y = 1
-        };
+        _currentRatingLabel.X = 1;
+        _currentRatingLabel.Y = 1;
 
         Label ratingLabel = new Label("Rating (1-5):")
         {
@@ -89,13 +74,10 @@ public class RateBookView : BaseView
             Y = 3
         };
 
-        _ratingCombo = new ComboBox()
-        {
-            X = Pos.Right(ratingLabel) + 2,
-            Y = 3,
-            Width = 15,
-            Height = 7
-        };
+        _ratingCombo.X = Pos.Right(ratingLabel) + 2;
+        _ratingCombo.Y = 3;
+        _ratingCombo.Width = 15;
+        _ratingCombo.Height = 7;
 
         _ratingCombo.SetSource(new string[] 
         { 
@@ -115,14 +97,11 @@ public class RateBookView : BaseView
             Y = 5
         };
 
-        _notesTextView = new TextView()
-        {
-            X = 1,
-            Y = 6,
-            Width = Dim.Fill() - 2,
-            Height = 7,
-            WordWrap = true
-        };
+        _notesTextView.X = 1;
+        _notesTextView.Y = 6;
+        _notesTextView.Width = Dim.Fill() - 2;
+        _notesTextView.Height = 7;
+        _notesTextView.WordWrap = true;
 
         Button saveButton = new Button("Save Rating & Notes")
         {
