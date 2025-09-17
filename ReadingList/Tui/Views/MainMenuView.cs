@@ -132,7 +132,8 @@ public class MainMenuView : BaseView
 
     private void NavigateToUpdateStatusView()
     {
-        ShowMessage("Info", "Update Status view - Coming next!");
+        UpdateStatusView updateStatusView = new UpdateStatusView(_readingListService, _navigationManager);
+        _navigationManager.NavigateTo(updateStatusView);
     }
 
     private void NavigateToRateBookView()
