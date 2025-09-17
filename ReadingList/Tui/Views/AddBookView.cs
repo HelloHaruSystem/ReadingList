@@ -39,7 +39,7 @@ public class AddBookView : BaseView
             X = 1,
             Y = 1,
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
 
         Label searchLabel = new Label("Books:")
@@ -69,7 +69,7 @@ public class AddBookView : BaseView
             X = 1,
             Y = 5,
             Width = Dim.Fill() - 2,
-            Height = 10
+            Height = UiConstants.Frames.MediumFrameHeight + 2
         };
 
         _resultsLabel.X = 1;
@@ -91,7 +91,7 @@ public class AddBookView : BaseView
             X = 1,
             Y = Pos.Bottom(resultsFrame),
             Width = Dim.Fill() - 2,
-            Height = 10
+            Height = UiConstants.Frames.MediumFrameHeight + 2
         };
 
         Label statusLabel = new Label("Status:")

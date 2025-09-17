@@ -71,7 +71,7 @@ public class StatisticsView : BaseView
             X = Pos.Right(statusFrame),
             Y = Pos.Bottom(overviewFrame),
             Width = Dim.Fill() - 1,
-            Height = 8
+            Height = UiConstants.Frames.MediumFrameHeight
         };
 
         _goalsLabel.X = 1;
@@ -111,7 +111,7 @@ public class StatisticsView : BaseView
             X = Pos.Right(topRatedFrame),
             Y = Pos.Bottom(goalsFrame),
             Width = Dim.Fill() - 1,
-            Height = 10
+            Height = UiConstants.Frames.MediumFrameHeight + 2
         };
 
         _recentActivityLabel.X = 1;

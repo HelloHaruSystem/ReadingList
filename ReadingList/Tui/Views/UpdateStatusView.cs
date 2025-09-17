@@ -58,7 +58,7 @@ public class UpdateStatusView : BaseView
             X = 1,
             Y = Pos.Bottom(booksFrame),
             Width = Dim.Fill() - 2,
-            Height = 12
+            Height = UiConstants.Frames.LargeFrameHeight
         };
 
         _selectedBookLabel.X = 1;

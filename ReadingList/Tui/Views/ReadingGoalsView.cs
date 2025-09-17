@@ -38,7 +38,7 @@ public class ReadingGoalsView : BaseView
             X = 1,
             Y = 1,
             Width = Dim.Fill() - 2,
-            Height = 12
+            Height = UiConstants.Frames.LargeFrameHeight
         };
 
         _goalsLabel.X = 1;
@@ -60,7 +60,7 @@ public class ReadingGoalsView : BaseView
             X = 1,
             Y = Pos.Bottom(goalsFrame),
             Width = Dim.Fill() - 2,
-            Height = 10
+            Height = UiConstants.Frames.MediumFrameHeight + 2
         };
 
         _selectedGoalLabel.X = 1;
@@ -107,7 +107,7 @@ public class ReadingGoalsView : BaseView
         Button createGoalButton = new Button("Create New Goal")
         {
             X = 1,
-            Y = 1
+            Y = UiConstants.Frames.DefaultMargin
         };
 
         createGoalButton.Clicked += () => ShowCreateGoalDialog();
@@ -115,7 +115,7 @@ public class ReadingGoalsView : BaseView
         Button browseForGoalButton = new Button("Browse Books for Goal")
         {
             X = Pos.Right(createGoalButton) + 2,
-            Y = 1
+            Y = UiConstants.Frames.DefaultMargin
         };
 
         browseForGoalButton.Clicked += () => ShowBrowseBooksForGoalDialog();
@@ -415,7 +415,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(descLabel) + 2,
             Y = 3,
-            Width = 30
+            Width = UiConstants.Controls.LargeTextFieldWidth
         };
         
         // Start date
@@ -443,7 +443,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(endLabel) + 2,
             Y = 7,
-            Width = 12
+            Width = UiConstants.Controls.DateFieldWidth
         };
         
         // Target books
@@ -477,7 +477,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(pagesLabel) + 2,
             Y = 11,
-            Width = 8
+            Width = UiConstants.Controls.NumberFieldWidth
         };
         
         Label pagesHint = new Label("(leave empty if no page target)")
@@ -942,7 +942,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(descLabel) + 2,
             Y = 6,
-            Width = 30
+            Width = UiConstants.Controls.LargeTextFieldWidth
         };
         
         Label startLabel = new Label("Start Date:")

@@ -31,7 +31,7 @@ public class SearchBooksView : BaseView
         FrameView searchFrame = new FrameView("Search")
         {
             X = 1,
-            Y = 1,
+            Y = UiConstants.Frames.DefaultMargin,
             Width = Dim.Fill() - 2,
             Height = UiConstants.Frames.SmallFrameHeight
         };
@@ -70,7 +70,7 @@ public class SearchBooksView : BaseView
         FrameView resultsFrame = new FrameView("Results")
         {
             X = 1,
-            Y = 5,
+            Y = UiConstants.Layout.SearchResultsOffset,
             Width = Dim.Fill() - 2,
             Height = Dim.Fill() - (UiConstants.Frames.SmallFrameHeight * 2 + UiConstants.Frames.DefaultSpacing)
         };
