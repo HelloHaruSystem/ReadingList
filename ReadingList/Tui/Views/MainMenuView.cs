@@ -104,7 +104,8 @@ public class MainMenuView : BaseView
 
     private void NavigateToSearchBooksView()
     {
-        ShowMessage("Info", "Search Books view - Coming next!");
+        SearchBooksView searchBooksView = new SearchBooksView(_bookService, _navigationManager);
+        _navigationManager.NavigateTo(searchBooksView);
     }
 
     private void NavigateToMyReadingListView()
