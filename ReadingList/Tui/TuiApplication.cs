@@ -1,15 +1,24 @@
+using ReadingList.Services;
 using ReadingList.Tui.Views;
+using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
 namespace ReadingList.Tui;
 
 public class TuiApplication
 {
-    private readonly MainView _mainView;
+    private readonly IBookService _bookService;
+    private readonly IReadingListService _readingListService;
+    private readonly IReadingGoalService _readingGoalService;
 
-    public TuiApplication(MainView mainView)
+    public TuiApplication(
+        IBookService bookService,
+        IReadingListService readingListService,
+        IReadingGoalService readingGoalService)
     {
-        _mainView = mainView;
+        _bookService = bookService;
+        _readingListService = readingListService;
+        _readingGoalService = readingGoalService;
     }
 
     public void Run()
@@ -17,14 +26,27 @@ public class TuiApplication
         Application.Init();
         Toplevel top = Application.Top;
 
-        // Apply a built-in color scheme to the entire TUI
+        // Apply color scheme
         top.ColorScheme = Colors.Base;
 
+        // Create navigation manager
+        NavigationManager navigationManager = new NavigationManager(top);
+
+        // Create main menu view
+        MainMenuView mainMenuView = new MainMenuView(
+            _bookService,
+            _readingListService, 
+            _readingGoalService,
+            navigationManager);
+
+        // Setup top-level UI
         MenuBar menu = CreateTopMenu();
         StatusBar statusBar = CreateStatusBar();
 
         top.Add(menu, statusBar);
-        top.Add(_mainView);
+
+        // Start navigation with main menu
+        navigationManager.NavigateTo(mainMenuView);
 
         Application.Run();
         Application.Shutdown();
