@@ -28,7 +28,7 @@ public class ReadingGoalService : IReadingGoalService
         return await _readingGoalRepository.GetActiveGoalsAsync();
     }
 
-    public async Task<GoalProgress> GetGoalProgressAsync(int goalId)
+    public async Task<GoalProgress?> GetGoalProgressAsync(int goalId)
     {
         (ReadingGoal? goal, int booksAdded, int totalPages) = await _readingGoalRepository.GetGoalProgressAsync(goalId);
 
@@ -71,7 +71,7 @@ public class ReadingGoalService : IReadingGoalService
 
     public async Task<bool> IsGoalAchievedAsync(int goalId)
     {
-        GoalProgress progress = await GetGoalProgressAsync(goalId);
+        GoalProgress? progress = await GetGoalProgressAsync(goalId);
         return progress?.IsGoalAchieved ?? false;
     }
 

@@ -2,7 +2,7 @@ namespace ReadingList.Models;
 
 public class GoalProgress
 {
-    public ReadingGoal Goal { get; set; }
+    public ReadingGoal? Goal { get; set; }
     public int BooksAdded { get; set; }
     public int TotalPages { get; set; }
     public double BookProgressPercentage { get; set; }
