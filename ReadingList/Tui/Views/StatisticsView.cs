@@ -16,6 +16,7 @@ public class StatisticsView : BaseView
     private Label _recentActivityLabel;
     private Label _goalsLabel;
     private ListView _topRatedListView;
+    private List<UserBook> _topRatedBooks;
 
     public StatisticsView(
         IReadingListService readingListService,
@@ -26,6 +27,7 @@ public class StatisticsView : BaseView
         _readingListService = readingListService;
         _readingGoalService = readingGoalService;
         _navigationManager = navigationManager;
+        _topRatedBooks = new List<UserBook>();
 
         SetNavigationManager(navigationManager);
         SetupUI();
@@ -112,6 +114,8 @@ public class StatisticsView : BaseView
             Width = Dim.Fill() - 2,
             Height = Dim.Fill() - 2
         };
+
+        _topRatedListView.OpenSelectedItem += OnTopRatedBookSelected;
 
         topRatedFrame.Add(topRatedHeaderLabel, _topRatedListView);
 
@@ -318,6 +322,8 @@ public class StatisticsView : BaseView
 
     private void UpdateTopRatedBooks(List<UserBook> topRated)
     {
+        _topRatedBooks = topRated; // Store for selection events
+        
         if (!topRated.Any())
         {
             _topRatedListView.SetSource(new string[] { "No rated books yet" });
@@ -365,5 +371,37 @@ public class StatisticsView : BaseView
             ReadingStatus.Abandoned => "Abandoned",
             _ => "Unknown"
         };
+    }
+
+    private void OnTopRatedBookSelected(ListViewItemEventArgs args)
+    {
+        if (args.Item >= 0 && args.Item < _topRatedBooks.Count)
+        {
+            UserBook selectedBook = _topRatedBooks[args.Item];
+            ShowBookDetails(selectedBook);
+        }
+    }
+
+    private void ShowBookDetails(UserBook userBook)
+    {
+        string status = GetStatusDisplayName(userBook.Status);
+        string rating = userBook.PersonalRating?.ToString() ?? "Not rated";
+        string notes = !string.IsNullOrWhiteSpace(userBook.PersonalNotes) 
+            ? userBook.PersonalNotes 
+            : "No notes";
+        string year = userBook.Book.PublicationYear?.ToString() ?? "N/A";
+        string pages = userBook.Book.Pages?.ToString() ?? "N/A";
+
+        string details = $"Title: {userBook.Book.Title}\n\n" +
+                        $"Publication Year: {year}\n" +
+                        $"Pages: {pages}\n\n" +
+                        $"Reading Status: {status}\n" +
+                        $"Your Rating: {rating}/5\n" +
+                        $"Date Started: {userBook.DateStarted:yyyy-MM-dd}\n" +
+                        $"Last Updated: {userBook.UpdatedAt:yyyy-MM-dd}\n\n" +
+                        $"Your Notes:\n{notes}\n\n" +
+                        $"Description:\n{userBook.Book.Description ?? "No description available."}";
+
+        MessageBox.Query(80, 20, "Book Details", details, "OK");
     }
 }
