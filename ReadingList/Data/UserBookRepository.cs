@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using ReadingList.Models;
