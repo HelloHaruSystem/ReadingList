@@ -4,12 +4,31 @@ namespace ReadingList.Tui.Views.Base;
 
 public abstract class BaseView : Window
 {
+    protected NavigationManager? _navigationManager;
+
     protected BaseView(string title) : base(title)
     {
         X = 0;
-        Y = 1;                   // space for the menu bar
+        Y = 1;
         Width = Dim.Fill();
-        Height = Dim.Fill() - 1; // space for the status bar
+        Height = Dim.Fill() - 1;
+        
+        // Handle ESC key globally for all views
+        KeyPress += OnKeyPress;
+    }
+
+    protected void SetNavigationManager(NavigationManager navigationManager)
+    {
+        _navigationManager = navigationManager;
+    }
+
+    private void OnKeyPress(KeyEventEventArgs args)
+    {
+        if (args.KeyEvent.Key == Key.Esc && _navigationManager != null && _navigationManager.CanNavigateBack)
+        {
+            _navigationManager.NavigateBack();
+            args.Handled = true;
+        }
     }
 
     protected virtual void SetupUI()

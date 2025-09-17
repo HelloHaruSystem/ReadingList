@@ -25,6 +25,7 @@ public class MyReadingListView : BaseView
         _userBooks = new List<UserBook>();
         _currentFilter = null;
 
+        SetNavigationManager(navigationManager);
         SetupUI();
     }
 

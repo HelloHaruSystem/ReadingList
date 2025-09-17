@@ -67,7 +67,8 @@ public class TuiApplication
     {
         return new StatusBar(new StatusItem[]
         {
-            new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => Application.RequestStop())
+            new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => Application.RequestStop()),
+            new StatusItem(Key.Unknown, "~TAB~ Navigate  ~ESC~ Back", null)
         });
     }
 }

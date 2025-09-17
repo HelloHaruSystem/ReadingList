@@ -21,6 +21,7 @@ public class BrowseBooksView : BaseView
         _navigationManager = navigationManager;
         _books = new List<Book>();
 
+        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
