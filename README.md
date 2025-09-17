@@ -53,4 +53,4 @@ This project relies on the following NuGet packages, which are automatically res
 * `Microsoft.Extensions.Configuration`
 * `Microsoft.Extensions.Configuration.Json`
 * `Microsoft.Extensions.DependencyInjection`
-* `Terminal.Gui` - [GitHub Repository](https://github.com/migueldeicaza/Terminal.Gui)
+* `Terminal.Gui` - [GitHub Repository](https://github.com/gui-cs/Terminal.Gui)
