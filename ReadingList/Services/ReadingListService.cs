@@ -44,7 +44,7 @@ public class ReadingListService : IReadingListService
         return await _userBookRepository.GetTopRatedBooksAsync(count);
     }
 
-    public async Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null)
+    public async Task<bool> RateBookAsync(int userBookId, int? rating, string? notes = null)
     {
         return await _userBookRepository.RateBookAsync(userBookId, rating, notes);
     }

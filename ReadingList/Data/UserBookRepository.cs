@@ -264,7 +264,7 @@ public class UserBookRepository : IUserBookRepository
         return userBooks;
     }
 
-    public async Task<bool> RateBookAsync(int userBookId, int rating, string? notes = null)
+    public async Task<bool> RateBookAsync(int userBookId, int? rating, string? notes = null)
     {
         string sql = @"
             UPDATE user_books

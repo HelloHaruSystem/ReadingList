@@ -138,7 +138,8 @@ public class MainMenuView : BaseView
 
     private void NavigateToRateBookView()
     {
-        ShowMessage("Info", "Rate Book view - Coming next!");
+        RateBookView rateBookView = new RateBookView(_readingListService, _navigationManager);
+        _navigationManager.NavigateTo(rateBookView);
     }
 
     private void NavigateToReadingGoalsView()
