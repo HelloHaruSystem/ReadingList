@@ -116,7 +116,8 @@ public class MainMenuView : BaseView
 
     private void NavigateToAddBookView()
     {
-        ShowMessage("Info", "Add Book view - Coming next!");
+        AddBookView addBookView = new AddBookView(_bookService, _readingListService, _navigationManager);
+        _navigationManager.NavigateTo(addBookView);
     }
 
     private void NavigateToUpdateStatusView()
