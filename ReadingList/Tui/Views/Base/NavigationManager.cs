@@ -6,8 +6,12 @@ namespace ReadingList.Tui.Views.Base;
 public class NavigationManager
 {
     private readonly Stack<BaseView> _viewStack = new();
-    private readonly Toplevel _top;
     private readonly IServiceProvider _serviceProvider;
+    private Toplevel? _top;
+
+    // Property that lazily gets the Top when first accessed
+    private Toplevel Top => _top ??= Application.Top
+        ?? throw new InvalidOperationException("Terminal.Gui Application not initialized");
 
     public NavigationManager(IServiceProvider serviceProvider)
     {
@@ -26,19 +30,19 @@ public class NavigationManager
         if (_viewStack.Count > 0)
         {
             BaseView currentView = _viewStack.Peek();
-            _top.Remove(currentView);
+            Top.Remove(currentView);
         }
 
         // Add view
         _viewStack.Push(view);
-        _top.Add(view);
+        Top.Add(view);
 
         // Activate view
         view.OnViewActivated();
 
         // Set focus refresh
         view.SetFocus();
-        _top.SetNeedsDisplay();
+        Top.SetNeedsDisplay();
     }
     
     public void NavigateBack()
@@ -47,16 +51,16 @@ public class NavigationManager
 
         // Remove current view
         BaseView currentView = _viewStack.Pop();
-        _top.Remove(currentView);
+        Top.Remove(currentView);
 
         // Show previous view
         if (_viewStack.Count > 0)
         {
             BaseView previousView = _viewStack.Peek();
-            _top.Add(previousView);
+            Top.Add(previousView);
             previousView.OnViewActivated();
             previousView.SetFocus();
-            _top.SetNeedsDisplay();
+            Top.SetNeedsDisplay();
         }
     }
 
@@ -66,7 +70,7 @@ public class NavigationManager
         while (_viewStack.Count > 0)
         {
             var view = _viewStack.Pop();
-            _top.Remove(view);
+            Top.Remove(view);
         }
 
         NavigateTo(mainView);

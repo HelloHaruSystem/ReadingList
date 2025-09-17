@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Readinglist.Tui.Views;
 using ReadingList.Data;
 using ReadingList.Services;
 using ReadingList.Tui;

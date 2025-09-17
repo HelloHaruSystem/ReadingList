@@ -1,5 +1,3 @@
-using Readinglist.Tui.Views;
-using ReadingList.Services;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
