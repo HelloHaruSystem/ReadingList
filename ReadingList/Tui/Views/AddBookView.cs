@@ -36,57 +36,85 @@ public class AddBookView : BaseView
 
     protected override void SetupUI()
     {
-        // Search section
-        Label searchLabel = new Label("Search Books:")
+        // Search section in a frame
+        FrameView searchFrame = new FrameView("Search")
         {
             X = 1,
-            Y = 1
+            Y = 1,
+            Width = Dim.Fill() - 2,
+            Height = 4
+        };
+
+        Label searchLabel = new Label("Books:")
+        {
+            X = 1,
+            Y = 0
         };
 
         _searchTextField = new TextField()
         {
             X = Pos.Right(searchLabel) + 2,
-            Y = 1,
-            Width = 30
+            Y = 0,
+            Width = 25
         };
 
         Button searchButton = new Button("Search")
         {
             X = Pos.Right(_searchTextField) + 2,
-            Y = 1
+            Y = 0
         };
 
         searchButton.Clicked += async () => await SearchBooksAsync();
 
-        // Results section
+        searchFrame.Add(searchLabel, _searchTextField, searchButton);
+
+        // Results section in a frame
+        FrameView resultsFrame = new FrameView("Results")
+        {
+            X = 1,
+            Y = 5,
+            Width = Dim.Fill() - 2,
+            Height = 10
+        };
+
         _resultsLabel = new Label("Search for books to add to your reading list")
         {
             X = 1,
-            Y = 3
+            Y = 0
         };
 
         _resultsListView = new ListView()
         {
             X = 1,
-            Y = 4,
+            Y = 1,
             Width = Dim.Fill() - 2,
-            Height = 8
+            Height = Dim.Fill() - 2
         };
 
         _resultsListView.SelectedItemChanged += OnBookHighlighted;
         _resultsListView.OpenSelectedItem += OnBookSelected;
 
-        // Status selection
-        Label statusLabel = new Label("Reading Status:")
+        resultsFrame.Add(_resultsLabel, _resultsListView);
+
+        // Action section in a frame
+        FrameView actionFrame = new FrameView("Add to List")
         {
             X = 1,
-            Y = 13
+            Y = Pos.Bottom(resultsFrame),
+            Width = Dim.Fill() - 2,
+            Height = 10
+        };
+
+        Label statusLabel = new Label("Status:")
+        {
+            X = 1,
+            Y = 0
         };
 
         _statusCombo = new ComboBox()
         {
             X = Pos.Right(statusLabel) + 2,
-            Y = 13,
+            Y = 0,
             Width = 20,
             Height = 6
         };
@@ -101,11 +129,10 @@ public class AddBookView : BaseView
 
         _statusCombo.Text = "To Read";
 
-        // Action buttons
         Button addButton = new Button("Add Selected Book")
         {
             X = 1,
-            Y = 15
+            Y = 2
         };
 
         addButton.Clicked += async () => await AddBookToListAsync();
@@ -113,12 +140,14 @@ public class AddBookView : BaseView
         Button backButton = new Button("Back")
         {
             X = Pos.Right(addButton) + 2,
-            Y = 15
+            Y = 2
         };
 
         backButton.Clicked += () => _navigationManager.NavigateBack();
 
-        Add(searchLabel, _searchTextField, searchButton, _resultsLabel, _resultsListView, statusLabel, _statusCombo, addButton, backButton);
+        actionFrame.Add(statusLabel, _statusCombo, addButton, backButton);
+
+        Add(searchFrame, resultsFrame, actionFrame);
     }
 
     public override void OnViewActivated()
