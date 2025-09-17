@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Terminal.Gui;
 
 namespace ReadingList.Utils;
 
