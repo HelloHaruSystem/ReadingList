@@ -4,11 +4,14 @@ using Terminal.Gui;
 
 namespace ReadingList.Tui;
 
-public class TuiApplication(IBookService bookService, IReadingListService readingListService, IReadingGoalService readingGoalService)
+public class TuiApplication
 {
-    private readonly IBookService _bookService = bookService;
-    private readonly IReadingListService _readingListService = readingListService;
-    private readonly IReadingGoalService _ReadingGoalService = readingGoalService;
+    private readonly MainView _mainView;
+
+    public TuiApplication(MainView mainView)
+    {
+        _mainView = mainView;
+    }
 
     public void Run()
     {
@@ -22,9 +25,7 @@ public class TuiApplication(IBookService bookService, IReadingListService readin
         StatusBar statusBar = CreateStatusBar();
 
         top.Add(menu, statusBar);
-
-        var mainView = new MainView(_bookService, _readingListService, _ReadingGoalService);
-        top.Add(mainView);
+        top.Add(_mainView);
 
         Application.Run();
         Application.Shutdown();

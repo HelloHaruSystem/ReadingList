@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Data;
 using ReadingList.Services;
 using ReadingList.Tui;
 using ReadingList.Tui.Views;
-using Terminal.Gui;
 
 /* crud goals
 
@@ -19,29 +19,42 @@ using Terminal.Gui;
 
 */
 
-// TODO: add invertion of controll container if I have time
-// dependencies
 // confg
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-// repositories
-IBookRepository bookRepo = new BookRepository(config);
-IUserBookRepository userBookRepo = new UserBookRepository(config);
-IReadingGoalRepository readingGoalRepo = new ReadingGoalRepository(config);
+// setup dependenciy incjetion container
+IServiceCollection services = new ServiceCollection();
 
-// services
-IBookService bookService = new BookService(bookRepo);
-IReadingListService readingListService = new ReadingListService(userBookRepo);
-IReadingGoalService readingGoalService = new ReadingGoalService(readingGoalRepo);
+// register config
+services.AddSingleton<IConfiguration>(config);
 
-// create and start tui app
-TuiApplication tuiApp = new TuiApplication(
-    bookService,
-    readingListService,
-    readingGoalService
-);
+// register repositories
+services.AddScoped<IBookRepository, BookRepository>();
+services.AddScoped<IUserBookRepository, UserBookRepository>();
+services.AddScoped<IReadingGoalRepository, ReadingGoalRepository>();
+
+// register services
+services.AddScoped<IBookService, BookService>();
+services.AddScoped<IReadingListService, ReadingListService>();
+services.AddScoped<IReadingGoalService, ReadingGoalService>();
+
+// register Views
+services.AddScoped<MainView>();
+
+// register tui
+services.AddScoped<TuiApplication>();
+
+// builder service
+ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+// create and start the tui app
+TuiApplication app = serviceProvider.GetService<TuiApplication>() 
+    ?? throw new Exception("Failed to create TuiApplication");
 
 // Run the App
-tuiApp.Run();
+app.Run();
+
+// clean up
+serviceProvider.Dispose();
