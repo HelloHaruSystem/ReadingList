@@ -4,28 +4,25 @@ using ReadingList.Services;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
-namespace Readinglist.Tui.Views;
+namespace ReadingList.Tui.Views;
 
 public class MyReadingListView : BaseView
 {
     private readonly IReadingListService _readingListService;
-    private readonly NavigationManager _navigationManager;
-    private ListView _booksListView;
-    private ComboBox _statusFilterCombo;
+    private readonly ListView _booksListView = new ListView();
+    private readonly ComboBox _statusFilterCombo = new ComboBox();
     private List<UserBook> _userBooks;
     private ReadingStatus? _currentFilter;
 
     public MyReadingListView(
         NavigationManager navigationManager,
         IReadingListService readingListService) 
-        : base("My Reading List")
+        : base("My Reading List", navigationManager)
     {
         _readingListService = readingListService;
-        _navigationManager = navigationManager;
         _userBooks = new List<UserBook>();
         _currentFilter = null;
 
-        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
@@ -46,13 +43,10 @@ public class MyReadingListView : BaseView
             Y = 0
         };
 
-        _statusFilterCombo = new ComboBox()
-        {
-            X = Pos.Right(filterLabel) + 2,
-            Y = 0,
-            Width = 20,
-            Height = 8
-        };
+        _statusFilterCombo.X = Pos.Right(filterLabel) + 2;
+        _statusFilterCombo.Y = 0;
+        _statusFilterCombo.Width = 20;
+        _statusFilterCombo.Height = 8;
 
         _statusFilterCombo.SetSource(new string[] 
         { 
@@ -78,13 +72,10 @@ public class MyReadingListView : BaseView
             Height = Dim.Fill() - 10
         };
 
-        _booksListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _booksListView.X = 1;
+        _booksListView.Y = 1;
+        _booksListView.Width = Dim.Fill() - 2;
+        _booksListView.Height = Dim.Fill() - 2;
 
         _booksListView.OpenSelectedItem += OnBookSelected;
         booksFrame.Add(_booksListView);
@@ -209,7 +200,7 @@ public class MyReadingListView : BaseView
 
         string details = $"Title: {userBook.Book.Title}\n\n" +
                         $"Status: {status}\n\n" +
-                        $"Personal Rating: {rating}/10\n\n" +
+                        $"Personal Rating: {rating}/5\n\n" +
                         $"Date Started: {userBook.DateStarted:yyyy-MM-dd}\n\n" +
                         $"Last Updated: {userBook.UpdatedAt:yyyy-MM-dd}\n\n" +
                         $"Personal Notes:\n{notes}\n\n" +
