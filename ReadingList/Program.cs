@@ -30,7 +30,7 @@ services.AddScoped<IReadingGoalService, ReadingGoalService>();
 // register navigation manager
 services.AddSingleton<NavigationManager>();
 
-// regiister views
+// register views
 services.AddScoped<MainMenuView>();
 services.AddScoped<BrowseBooksView>();
 services.AddScoped<SearchBooksView>();
