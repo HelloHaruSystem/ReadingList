@@ -1,5 +1,6 @@
 using ReadingList.Models;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -387,7 +388,7 @@ public class ReadingGoalsView : BaseView
 
     private void ShowCreateGoalDialog()
     {
-        Dialog dialog = new Dialog("Create New Reading Goal", 70, 20);
+        Dialog dialog = new Dialog("Create New Reading Goal", UiConstants.Dialogs.LargeWidth, UiConstants.Dialogs.ExtraLargeHeight);
         
         // Goal name
         Label nameLabel = new Label("Goal Name:")
@@ -400,7 +401,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(nameLabel) + 2,
             Y = 1,
-            Width = 30
+            Width = UiConstants.Controls.LargeTextFieldWidth
         };
         
         // Description
@@ -428,7 +429,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(startLabel) + 2,
             Y = 5,
-            Width = 12
+            Width = UiConstants.Controls.DateFieldWidth
         };
         
         // End date
@@ -456,7 +457,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(booksLabel) + 2,
             Y = 9,
-            Width = 8
+            Width = UiConstants.Controls.NumberFieldWidth
         };
         
         Label booksHint = new Label("(leave empty if no book target)")
@@ -605,7 +606,7 @@ public class ReadingGoalsView : BaseView
 
     private void ShowBrowseBooksForGoalDialog()
     {
-        Dialog dialog = new Dialog("Browse Books - Create Goal", 85, 30);
+        Dialog dialog = new Dialog("Browse Books - Create Goal", UiConstants.Dialogs.VeryLargeWidth, UiConstants.Dialogs.MaxHeight);
         
         // Search section
         Label searchLabel = new Label("Search or browse books to add to your new goal:")
@@ -618,7 +619,7 @@ public class ReadingGoalsView : BaseView
         {
             X = 1,
             Y = 2,
-            Width = 30
+            Width = UiConstants.Controls.LargeTextFieldWidth
         };
         
         Button searchButton = new Button("Search")
@@ -645,7 +646,7 @@ public class ReadingGoalsView : BaseView
             X = 1,
             Y = 5,
             Width = Dim.Fill() - 2,
-            Height = 12
+            Height = UiConstants.Frames.LargeFrameHeight
         };
         
         // Selected books section
@@ -660,7 +661,7 @@ public class ReadingGoalsView : BaseView
             X = 1,
             Y = 19,
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
         
         List<Book> searchResults = new List<Book>();
@@ -895,7 +896,7 @@ public class ReadingGoalsView : BaseView
 
     private void ShowCreateGoalWithBooksDialog(List<Book> selectedBooks)
     {
-        Dialog dialog = new Dialog("Create Goal with Selected Books", 75, 22);
+        Dialog dialog = new Dialog("Create Goal with Selected Books", UiConstants.Dialogs.LargeWidth, UiConstants.Dialogs.VeryLargeHeight);
         
         // Show selected books
         Label booksLabel = new Label($"Creating goal with {selectedBooks.Count} selected books:")
@@ -928,7 +929,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(nameLabel) + 2,
             Y = 4,
-            Width = 30
+            Width = UiConstants.Controls.LargeTextFieldWidth
         };
         
         Label descLabel = new Label("Description:")
@@ -954,7 +955,7 @@ public class ReadingGoalsView : BaseView
         {
             X = Pos.Right(startLabel) + 2,
             Y = 8,
-            Width = 12
+            Width = UiConstants.Controls.DateFieldWidth
         };
         
         Label endLabel = new Label("Deadline:")
@@ -1080,7 +1081,7 @@ public class ReadingGoalsView : BaseView
             return;
         }
 
-        Dialog dialog = new Dialog($"Add Book to '{_selectedGoal.GoalName}'", 80, 25);
+        Dialog dialog = new Dialog($"Add Book to '{_selectedGoal.GoalName}'", UiConstants.Dialogs.ExtraLargeWidth, UiConstants.Dialogs.HugeHeight);
         
         // Search section
         Label searchLabel = new Label("Search for books:")
@@ -1093,7 +1094,7 @@ public class ReadingGoalsView : BaseView
         {
             X = 1,
             Y = 2,
-            Width = 30
+            Width = UiConstants.Controls.LargeTextFieldWidth
         };
         
         Button searchButton = new Button("Search")
@@ -1114,7 +1115,7 @@ public class ReadingGoalsView : BaseView
             X = 1,
             Y = 5,
             Width = Dim.Fill() - 2,
-            Height = 12
+            Height = UiConstants.Frames.LargeFrameHeight
         };
         
         List<Book> searchResults = new List<Book>();

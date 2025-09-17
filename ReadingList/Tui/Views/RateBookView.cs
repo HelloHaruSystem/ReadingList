@@ -1,6 +1,7 @@
 using ReadingList.Models;
 using ReadingList.Models.Enums;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -37,7 +38,7 @@ public class RateBookView : BaseView
             X = 1,
             Y = 1,
             Width = Dim.Fill() - 2,
-            Height = 10
+            Height = UiConstants.Frames.MediumFrameHeight + 2
         };
 
         _booksLabel.X = 1;
@@ -59,7 +60,7 @@ public class RateBookView : BaseView
             X = 1,
             Y = Pos.Bottom(booksFrame),
             Width = Dim.Fill() - 2,
-            Height = 18
+            Height = UiConstants.Frames.ExtraLargeFrameHeight
         };
 
         _selectedBookLabel.X = 1;
@@ -76,8 +77,8 @@ public class RateBookView : BaseView
 
         _ratingCombo.X = Pos.Right(ratingLabel) + 2;
         _ratingCombo.Y = 3;
-        _ratingCombo.Width = 15;
-        _ratingCombo.Height = 7;
+        _ratingCombo.Width = UiConstants.Controls.SmallComboBoxWidth;
+        _ratingCombo.Height = UiConstants.Controls.SmallComboBoxHeight;
 
         _ratingCombo.SetSource(new string[] 
         { 
@@ -100,7 +101,7 @@ public class RateBookView : BaseView
         _notesTextView.X = 1;
         _notesTextView.Y = 6;
         _notesTextView.Width = Dim.Fill() - 2;
-        _notesTextView.Height = 7;
+        _notesTextView.Height = UiConstants.Controls.TextViewHeight;
         _notesTextView.WordWrap = true;
 
         Button saveButton = new Button("Save Rating & Notes")
@@ -128,7 +129,7 @@ public class RateBookView : BaseView
             X = 1,
             Y = Pos.Bottom(ratingFrame),
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
 
         Button backButton = new Button("Back")

@@ -1,5 +1,6 @@
 using ReadingList.Models;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -32,7 +33,7 @@ public class SearchBooksView : BaseView
             X = 1,
             Y = 1,
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
 
         Label searchLabel = new Label("Books:")
@@ -43,7 +44,7 @@ public class SearchBooksView : BaseView
 
         _searchTextField.X = Pos.Right(searchLabel) + 2;
         _searchTextField.Y = 0;
-        _searchTextField.Width = 25;
+        _searchTextField.Width = UiConstants.Controls.TextFieldWidth;
 
         Button searchButton = new Button("Search")
         {
@@ -71,7 +72,7 @@ public class SearchBooksView : BaseView
             X = 1,
             Y = 5,
             Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 10
+            Height = Dim.Fill() - (UiConstants.Frames.SmallFrameHeight * 2 + UiConstants.Frames.DefaultSpacing)
         };
 
         _resultsLabel.X = 1;
@@ -92,7 +93,7 @@ public class SearchBooksView : BaseView
             X = 1,
             Y = Pos.Bottom(resultsFrame),
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
 
         Button backButton = new Button("Back")

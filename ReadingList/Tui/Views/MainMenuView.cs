@@ -1,3 +1,4 @@
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -16,10 +17,10 @@ public class MainMenuView : BaseView
     {
         FrameView menuFrame = new FrameView("Main Menu")
         {
-            X = Pos.Center() - 18,
+            X = Pos.Center() - UiConstants.Layout.MainMenuCenterOffset,
             Y = Pos.Center() - 5,
-            Width = 36,
-            Height = 12
+            Width = UiConstants.Layout.MainMenuWidth,
+            Height = UiConstants.Layout.MainMenuHeight
         };
 
         ListView menuList = CreateMainMenu();

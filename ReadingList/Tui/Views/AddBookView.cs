@@ -1,6 +1,7 @@
 using ReadingList.Models;
 using ReadingList.Models.Enums;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -49,7 +50,7 @@ public class AddBookView : BaseView
 
         _searchTextField.X = Pos.Right(searchLabel) + 2;
         _searchTextField.Y = 0;
-        _searchTextField.Width = 25;
+        _searchTextField.Width = UiConstants.Controls.TextFieldWidth;
         
 
         Button searchButton = new Button("Search")
@@ -101,8 +102,8 @@ public class AddBookView : BaseView
 
         _statusCombo.X = Pos.Right(statusLabel) + 2;
         _statusCombo.Y = 0;
-        _statusCombo.Width = 20;
-        _statusCombo.Height = 6;
+        _statusCombo.Width = UiConstants.Controls.ComboBoxWidth;
+        _statusCombo.Height = UiConstants.Controls.ComboBoxHeight;
 
         _statusCombo.SetSource(new string[] 
         { 

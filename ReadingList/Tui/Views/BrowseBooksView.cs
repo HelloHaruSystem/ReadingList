@@ -1,5 +1,6 @@
 using ReadingList.Models;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -22,17 +23,17 @@ public class BrowseBooksView : BaseView
     protected override void SetupUI()
     {
         // init listView fields
-        _booksListView.X = 1;
-        _booksListView.Y = 1;
-        _booksListView.Width = Dim.Fill() - 2;
-        _booksListView.Height = Dim.Fill() - 4;
+        _booksListView.X = UiConstants.Frames.DefaultMargin;
+        _booksListView.Y = UiConstants.Frames.DefaultMargin;
+        _booksListView.Width = Dim.Fill() - (UiConstants.Frames.DefaultMargin * 2);
+        _booksListView.Height = Dim.Fill() - UiConstants.Frames.SmallFrameHeight;
         _booksListView.OpenSelectedItem += OnBookSelected;
 
         // Create back button
         Button backButton = new Button("Back")
         {
-            X = 1,
-            Y = Pos.Bottom(this) - 3
+            X = UiConstants.Frames.DefaultMargin,
+            Y = Pos.Bottom(this) - UiConstants.Layout.BottomButtonOffset
         };
 
         backButton.Clicked += () => _navigationManager.NavigateBack();
@@ -40,8 +41,8 @@ public class BrowseBooksView : BaseView
         // Create refresh button
         Button refreshButton = new Button("Refresh")
         {
-            X = Pos.Right(backButton) + 2,
-            Y = Pos.Bottom(this) - 3
+            X = Pos.Right(backButton) + UiConstants.Frames.DefaultSpacing,
+            Y = Pos.Bottom(this) - UiConstants.Layout.BottomButtonOffset
         };
 
         refreshButton.Clicked += async () => await LoadBooksAsync();

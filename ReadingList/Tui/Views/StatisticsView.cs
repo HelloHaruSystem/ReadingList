@@ -1,6 +1,7 @@
 using ReadingList.Models;
 using ReadingList.Models.Enums;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -38,7 +39,7 @@ public class StatisticsView : BaseView
             X = 1,
             Y = 1,
             Width = Dim.Fill() - 2,
-            Height = 6
+            Height = UiConstants.Frames.MediumFrameHeight - 2
         };
 
         _overviewLabel.X = 1;
@@ -54,7 +55,7 @@ public class StatisticsView : BaseView
             X = 1,
             Y = Pos.Bottom(overviewFrame),
             Width = Dim.Percent(50),
-            Height = 8
+            Height = UiConstants.Frames.MediumFrameHeight
         };
 
         _statusBreakdownLabel.X = 1;
@@ -86,7 +87,7 @@ public class StatisticsView : BaseView
             X = 1,
             Y = Pos.Bottom(statusFrame),
             Width = Dim.Percent(65),
-            Height = 10
+            Height = UiConstants.Frames.MediumFrameHeight + 2
         };
 
         Label topRatedHeaderLabel = new Label("Your highest rated books:")
@@ -126,7 +127,7 @@ public class StatisticsView : BaseView
             X = 1,
             Y = Pos.Bottom(topRatedFrame),
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
 
         Button refreshButton = new Button("Refresh")
@@ -161,7 +162,7 @@ public class StatisticsView : BaseView
         {
             // Load all reading data concurrently
             var allBooksTask = _readingListService.GetMyReadingListAsync();
-            var recentCompletedTask = _readingListService.GetRecentlyCompletedBooksAsync(5);
+            var recentCompletedTask = _readingListService.GetRecentlyCompletedBooksAsync(UiConstants.DataLimits.DefaultRecentCompletedCount);
             var topRatedTask = _readingListService.GetTopRatedBooksAsync(5);
             var activeGoalsTask = _readingGoalService.GetActiveGoalsAsync();
 
@@ -263,7 +264,7 @@ public class StatisticsView : BaseView
         string goalsText = $"Active Goals: {activeGoals.Count}\n\n";
         
         int achievedGoals = 0;
-        foreach (var goal in activeGoals.Take(3)) // Show progress for first 3 goals
+        foreach (var goal in activeGoals.Take(UiConstants.DataLimits.MaxGoalsDisplayed)) // Show progress for first 3 goals
         {
             try
             {
@@ -331,7 +332,7 @@ public class StatisticsView : BaseView
 
         string activityText = "Recently Completed:\n\n";
         
-        foreach (var book in recentCompleted.Take(4)) // Show last 4 completed
+        foreach (var book in recentCompleted.Take(UiConstants.DataLimits.MaxRecentActivityItems)) // Show last 4 completed
         {
             string rating = book.PersonalRating?.ToString() ?? "Not rated";
             activityText += $"{book.Book.Title}\n";

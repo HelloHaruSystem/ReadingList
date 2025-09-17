@@ -1,6 +1,7 @@
 using ReadingList.Models;
 using ReadingList.Models.Enums;
 using ReadingList.Services;
+using ReadingList.Tui.Configuration;
 using ReadingList.Tui.Views.Base;
 using Terminal.Gui;
 
@@ -45,8 +46,8 @@ public class MyReadingListView : BaseView
 
         _statusFilterCombo.X = Pos.Right(filterLabel) + 2;
         _statusFilterCombo.Y = 0;
-        _statusFilterCombo.Width = 20;
-        _statusFilterCombo.Height = 8;
+        _statusFilterCombo.Width = UiConstants.Controls.ComboBoxWidth;
+        _statusFilterCombo.Height = UiConstants.Controls.LargeComboBoxHeight;
 
         _statusFilterCombo.SetSource(new string[] 
         { 
@@ -69,7 +70,7 @@ public class MyReadingListView : BaseView
             X = 1,
             Y = 5,
             Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 10
+            Height = Dim.Fill() - (UiConstants.Frames.SmallFrameHeight * 2 + UiConstants.Frames.DefaultSpacing)
         };
 
         _booksListView.X = 1;
@@ -86,7 +87,7 @@ public class MyReadingListView : BaseView
             X = 1,
             Y = Pos.Bottom(booksFrame),
             Width = Dim.Fill() - 2,
-            Height = 4
+            Height = UiConstants.Frames.SmallFrameHeight
         };
 
         Button backButton = new Button("Back")

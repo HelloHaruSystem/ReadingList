@@ -1,3 +1,4 @@
+using ReadingList.Tui.Configuration;
 using Terminal.Gui;
 
 namespace ReadingList.Tui.Views.Base;
@@ -12,9 +13,9 @@ public abstract class BaseView : Window
             ?? throw new ArgumentNullException(nameof(navigationManager));
 
         X = 0;
-        Y = 1;
+        Y = UiConstants.Layout.MenuBarHeight;
         Width = Dim.Fill();
-        Height = Dim.Fill() - 1;
+        Height = Dim.Fill() - UiConstants.Layout.MenuBarHeight;
         
         // Handle ESC key globally for all views
         KeyPress += OnKeyPress;
