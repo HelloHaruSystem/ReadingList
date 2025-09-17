@@ -8,22 +8,19 @@ namespace ReadingList.Tui.Views;
 public class SearchBooksView : BaseView
 {
     private readonly IBookService _bookService;
-    private readonly NavigationManager _navigationManager;
-    private TextField _searchTextField;
-    private ListView _resultsListView;
-    private Label _resultsLabel;
+    private readonly TextField _searchTextField = new TextField();
+    private readonly ListView _resultsListView = new ListView();
+    private readonly Label _resultsLabel = new Label("Enter search term and press Search");
     private List<Book> _searchResults;
 
     public SearchBooksView(
         NavigationManager navigationManager,
         IBookService bookService) 
-        : base("Search Books")
+        : base("Search Books", navigationManager)
     {
         _bookService = bookService;
-        _navigationManager = navigationManager;
         _searchResults = new List<Book>();
 
-        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
@@ -44,12 +41,9 @@ public class SearchBooksView : BaseView
             Y = 0
         };
 
-        _searchTextField = new TextField()
-        {
-            X = Pos.Right(searchLabel) + 2,
-            Y = 0,
-            Width = 25
-        };
+        _searchTextField.X = Pos.Right(searchLabel) + 2;
+        _searchTextField.Y = 0;
+        _searchTextField.Width = 25;
 
         Button searchButton = new Button("Search")
         {
@@ -80,19 +74,13 @@ public class SearchBooksView : BaseView
             Height = Dim.Fill() - 10
         };
 
-        _resultsLabel = new Label("Enter search term and press Search")
-        {
-            X = 1,
-            Y = 0
-        };
+        _resultsLabel.X = 1;
+        _resultsLabel.Y = 0;
 
-        _resultsListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _resultsListView.X = 1;
+        _resultsListView.Y = 1;
+        _resultsListView.Width = Dim.Fill() - 2;
+        _resultsListView.Height = Dim.Fill() - 2;
 
         _resultsListView.OpenSelectedItem += OnBookSelected;
 

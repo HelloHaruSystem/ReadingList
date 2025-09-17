@@ -9,24 +9,21 @@ namespace ReadingList.Tui.Views;
 public class UpdateStatusView : BaseView
 {
     private readonly IReadingListService _readingListService;
-    private readonly NavigationManager _navigationManager;
-    private ListView _booksListView;
-    private ComboBox _statusCombo;
-    private Label _booksLabel;
-    private Label _selectedBookLabel;
+    private readonly ListView _booksListView = new ListView();
+    private readonly ComboBox _statusCombo = new ComboBox();
+    private readonly Label _booksLabel = new Label("Select a book to update its status:");
+    private readonly Label _selectedBookLabel = new Label("No book selected");
     private List<UserBook> _userBooks;
     private UserBook? _selectedBook;
 
     public UpdateStatusView(
         NavigationManager navigationManager,
         IReadingListService readingListService) 
-        : base("Update Reading Status")
+        : base("Update Reading Status", navigationManager)
     {
         _readingListService = readingListService;
-        _navigationManager = navigationManager;
         _userBooks = new List<UserBook>();
 
-        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
@@ -41,19 +38,13 @@ public class UpdateStatusView : BaseView
             Height = 12
         };
 
-        _booksLabel = new Label("Select a book to update its status:")
-        {
-            X = 1,
-            Y = 0
-        };
+        _booksLabel.X = 1;
+        _booksLabel.Y = 0;
 
-        _booksListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _booksListView.X = 1;
+        _booksListView.Y = 1;
+        _booksListView.Width = Dim.Fill() - 2;
+        _booksListView.Height = Dim.Fill() - 2;
 
         _booksListView.SelectedItemChanged += OnBookHighlighted;
         _booksListView.OpenSelectedItem += OnBookSelected;
@@ -69,11 +60,8 @@ public class UpdateStatusView : BaseView
             Height = 12
         };
 
-        _selectedBookLabel = new Label("No book selected")
-        {
-            X = 1,
-            Y = 0
-        };
+        _selectedBookLabel.X = 1;
+        _selectedBookLabel.Y = 0;
 
         Label newStatusLabel = new Label("New Status:")
         {
@@ -81,13 +69,10 @@ public class UpdateStatusView : BaseView
             Y = 2
         };
 
-        _statusCombo = new ComboBox()
-        {
-            X = Pos.Right(newStatusLabel) + 2,
-            Y = 2,
-            Width = 25,
-            Height = 8
-        };
+        _statusCombo.X = Pos.Right(newStatusLabel) + 2;
+        _statusCombo.Y = 2;
+        _statusCombo.Width = 25;
+        _statusCombo.Height = 8;
 
         _statusCombo.SetSource(new string[] 
         { 

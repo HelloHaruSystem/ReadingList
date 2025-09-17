@@ -9,11 +9,10 @@ public class ReadingGoalsView : BaseView
 {
     private readonly IReadingGoalService _readingGoalService;
     private readonly IBookService _bookService;
-    private readonly NavigationManager _navigationManager;
-    private ListView _goalsListView;
-    private Label _goalsLabel;
-    private Label _selectedGoalLabel;
-    private Label _progressLabel;
+    private readonly ListView _goalsListView = new ListView();
+    private readonly Label _goalsLabel = new Label("Your reading goals:");
+    private readonly Label _selectedGoalLabel = new Label("No goal selected");
+    private readonly Label _progressLabel = new Label("");
     private List<ReadingGoal> _goals;
     private ReadingGoal? _selectedGoal;
 
@@ -21,14 +20,12 @@ public class ReadingGoalsView : BaseView
         NavigationManager navigationManager,
         IReadingGoalService readingGoalService,
         IBookService bookService) 
-        : base("Reading Goals")
+        : base("Reading Goals", navigationManager)
     {
         _readingGoalService = readingGoalService;
         _bookService = bookService;
-        _navigationManager = navigationManager;
         _goals = new List<ReadingGoal>();
 
-        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
@@ -43,19 +40,13 @@ public class ReadingGoalsView : BaseView
             Height = 12
         };
 
-        _goalsLabel = new Label("Your reading goals:")
-        {
-            X = 1,
-            Y = 0
-        };
+        _goalsLabel.X = 1;
+        _goalsLabel.Y = 0;
 
-        _goalsListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _goalsListView.X = 1;
+        _goalsListView.Y = 1;
+        _goalsListView.Width = Dim.Fill() - 2;
+        _goalsListView.Height = Dim.Fill() - 2;
 
         _goalsListView.SelectedItemChanged += OnGoalHighlighted;
         _goalsListView.OpenSelectedItem += OnGoalSelected;
@@ -71,17 +62,11 @@ public class ReadingGoalsView : BaseView
             Height = 10
         };
 
-        _selectedGoalLabel = new Label("No goal selected")
-        {
-            X = 1,
-            Y = 0
-        };
+        _selectedGoalLabel.X = 1;
+        _selectedGoalLabel.Y = 0;
 
-        _progressLabel = new Label("")
-        {
-            X = 1,
-            Y = 2
-        };
+        _progressLabel.X = 1;
+        _progressLabel.Y = 2;
 
         Button viewDetailsButton = new Button("View Full Details")
         {
@@ -248,23 +233,29 @@ public class ReadingGoalsView : BaseView
             {
                 GoalProgress? progress = await _readingGoalService.GetGoalProgressAsync(_selectedGoal.Id);
                 
+                if (progress?.Goal == null) // Check both progress and Goal
+                {
+                    ShowError("Could not load goal details.");
+                    return;
+                }
+                
                 if (progress != null)
                 {
                     string progressText = "";
-                    
+
                     if (progress.Goal.TargetBooks.HasValue)
                     {
                         progressText += $"Books: {progress.BooksAdded}/{progress.Goal.TargetBooks} ({progress.BookProgressPercentage:F1}%)\n";
                     }
-                    
+
                     if (progress.Goal.TargetPages.HasValue)
                     {
                         progressText += $"Pages: {progress.TotalPages}/{progress.Goal.TargetPages} ({progress.PageProgressPercentage:F1}%)\n";
                     }
-                    
+
                     if (progress.IsGoalAchieved)
                     {
-                        progressText += "Status: ACHIEVED! 🎉";
+                        progressText += "Status: ACHIEVED!";
                     }
                     else
                     {
@@ -278,7 +269,7 @@ public class ReadingGoalsView : BaseView
                             progressText += "Status: OVERDUE";
                         }
                     }
-                    
+
                     _progressLabel.Text = progressText;
                 }
                 else
@@ -318,7 +309,7 @@ public class ReadingGoalsView : BaseView
         {
             GoalProgress? progress = await _readingGoalService.GetGoalProgressAsync(_selectedGoal.Id);
             
-            if (progress == null)
+            if (progress?.Goal == null)
             {
                 ShowError("Could not load goal details.");
                 return;
@@ -980,7 +971,7 @@ public class ReadingGoalsView : BaseView
         };
 
         // Calculate total pages for suggestion
-        int totalPages = selectedBooks.Where(b => b.Pages.HasValue).Sum(b => b.Pages.Value);
+        int totalPages = selectedBooks.Where(b => b.Pages.HasValue).Sum(b => b.Pages.GetValueOrDefault());
         
         Label targetLabel = new Label($"Suggested targets: {selectedBooks.Count} books, {totalPages} pages")
         {
