@@ -10,7 +10,7 @@ public interface IReadingGoalService
     Task<bool> MarkGoalCompleteAsync(int goalId);
     
    
-    Task<ReadingGoal> GetGoalProgressAsync(int goalId);
+    Task<GoalProgress> GetGoalProgressAsync(int goalId);
     Task<bool> IsGoalAchievedAsync(int goalId);
     Task<IEnumerable<ReadingGoal>> GetUpcomingDeadlinesAsync(int days = 7);
 }

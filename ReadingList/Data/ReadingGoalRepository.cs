@@ -139,19 +139,19 @@ public class ReadingGoalRepository : IReadingGoalRepository
         }
     }
 
-    public async Task<ReadingGoal?> GetGoalProgressAsync(int goalId)
+    public async Task<(ReadingGoal? goal, int booksAdded, int totalPages)> GetGoalProgressAsync(int goalId)
     {
         ReadingGoal? goal = null;
 
         const string sql = @"
             SELECT 
-                rg..*,
+                rg.*,
                 COUNT(gb.book_isbn) AS books_added,
                 SUM(
                     CASE WHEN
                         b.pages IS NOT NULL THEN b.pages ELSE 0
                     END
-                )
+                ) AS total_pages
             FROM reading_goals AS rg
             LEFT JOIN goal_books AS gb
             ON gb.goal_id = rg.id
@@ -159,10 +159,10 @@ public class ReadingGoalRepository : IReadingGoalRepository
             ON b.isbn = gb.book_isbn
             WHERE rg.id = @goalId
             GROUP BY
-                rg.id, rg.goal_name
-                rg,description, rg.start_date,
+                rg.id, rg.goal_name,
+                rg.description, rg.start_date,
                 rg.deadline, rg.target_books,
-                rg.target_pages, rg..is_completed";
+                rg.target_pages, rg.is_completed";
 
         using SqlConnection connection = new SqlConnection(_connectionString);
         using SqlCommand command = new SqlCommand(sql, connection);
@@ -187,14 +187,19 @@ public class ReadingGoalRepository : IReadingGoalRepository
                     TargetPages = SqlDataReaderHelper.GetIntOrNull(reader, "target_pages"),
                     IsCompleted = SqlDataReaderHelper.GetBool(reader, "is_completed"),
                 };
+
+                int booksAdded = SqlDataReaderHelper.GetInt(reader, "books_added");
+                int totalPages = SqlDataReaderHelper.GetInt(reader, "total_pages");
+            
+                return (goal, booksAdded, totalPages);
             }
             
-            return goal;
+            return (null, 0, 0);
         }
         catch (Exception ex)
         {
             Console.Write("Error fetching goal progress from DB:\n{0}\n", ex.Message);
-            return null;
+            return (null, 0, 0);
         }
     }
 }

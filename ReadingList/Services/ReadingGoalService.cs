@@ -28,9 +28,37 @@ public class ReadingGoalService : IReadingGoalService
         return await _readingGoalRepository.GetActiveGoalsAsync();
     }
 
-    public Task<ReadingGoal> GetGoalProgressAsync(int goalId)
+    public async Task<GoalProgress> GetGoalProgressAsync(int goalId)
     {
-        throw new NotImplementedException();
+        (ReadingGoal? goal, int booksAdded, int totalPages) = await _readingGoalRepository.GetGoalProgressAsync(goalId);
+
+        if (goal == null)
+        {
+            return null;
+        }
+
+        // Calculate book progress
+        bool isBookTargetMet = goal.TargetBooks == null || booksAdded >= goal.TargetBooks;
+        double bookProgressPercentage = goal.TargetBooks != null ? (double)booksAdded / goal.TargetBooks.Value * 100 : 100;
+    
+        // Calculate page progress  
+        bool isPageTargetMet = goal.TargetPages == null || totalPages >= goal.TargetPages;
+        double pageProgressPercentage = goal.TargetPages != null ? (double)totalPages / goal.TargetPages.Value * 100 : 100;
+    
+        // Overall achievement
+        bool isGoalAchieved = isBookTargetMet && isPageTargetMet;
+    
+        return new GoalProgress
+        {
+            Goal = goal,
+            BooksAdded = booksAdded,
+            TotalPages = totalPages,
+            BookProgressPercentage = Math.Min(bookProgressPercentage, 100),
+            PageProgressPercentage = Math.Min(pageProgressPercentage, 100),
+            IsBookTargetMet = isBookTargetMet,
+            IsPageTargetMet = isPageTargetMet,
+            IsGoalAchieved = isGoalAchieved
+        };
     }
 
     public async Task<IEnumerable<ReadingGoal>> GetUpcomingDeadlinesAsync(int days = 7)
@@ -41,9 +69,10 @@ public class ReadingGoalService : IReadingGoalService
         return activeGoals.Where(g => g.Deadline <= cutoffDate);
     }
 
-    public Task<bool> IsGoalAchievedAsync(int goalId)
+    public async Task<bool> IsGoalAchievedAsync(int goalId)
     {
-        throw new NotImplementedException();
+        GoalProgress progress = await GetGoalProgressAsync(goalId);
+        return progress?.IsGoalAchieved ?? false;
     }
 
     public async Task<bool> MarkGoalCompleteAsync(int goalId)

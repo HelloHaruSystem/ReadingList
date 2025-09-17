@@ -8,5 +8,5 @@ public interface IReadingGoalRepository
     Task<int> CreateGoalAsync(ReadingGoal goal);
     Task<bool> AddBookToGoalAsync(int goalId, string isbn);
     Task<bool> MarkGoalCompleteAsync(int goalId);
-    Task<ReadingGoal?> GetGoalProgressAsync(int goalId);
+    Task<(ReadingGoal? goal, int booksAdded, int totalPages)> GetGoalProgressAsync(int goalId);
 }
