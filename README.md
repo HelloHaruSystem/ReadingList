@@ -25,6 +25,7 @@ This project was an ADO.NET assignment that required building on an existing dat
     * In the project's root directory, create a new file named `appsettings.json`.
     * Add your database connection string to this file using the format below. Replace the placeholder values with your actual server, user, and password information.
 
+
     ```json
     {
       "ConnectionStrings": {
@@ -37,6 +38,7 @@ This project was an ADO.NET assignment that required building on an existing dat
     * Open your terminal or command prompt.
     * Navigate to the project's root directory (the same folder as `ReadingList.csproj`).
     * Run the following command:
+
 
     ```bash
     dotnet run
