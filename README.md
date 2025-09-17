@@ -11,7 +11,7 @@ This project was an ADO.NET assignment that required building on an existing dat
 * Implement **Create, Read, Update, and Delete (CRUD)** operations for various database tables.
 * Create a **menu-driven system** for navigating the application's features.
 * Use **ADO.NET parameters** to prevent SQL injection vulnerabilities.
-* Develop a user-friendly TUI.
+* Develop a user-friendly TUI.a
 
 ---
 
@@ -43,3 +43,14 @@ This project was an ADO.NET assignment that required building on an existing dat
     ```bash
     dotnet run
     ```
+---
+
+### Dependencies
+
+This project relies on the following NuGet packages, which are automatically restored when you run `dotnet run`:
+
+* `Microsoft.Data.SqlClient`
+* `Microsoft.Extensions.Configuration`
+* `Microsoft.Extensions.Configuration.Json`
+* `Microsoft.Extensions.DependencyInjection`
+* `Terminal.Gui` - [GitHub Repository](https://github.com/migueldeicaza/Terminal.Gui)
