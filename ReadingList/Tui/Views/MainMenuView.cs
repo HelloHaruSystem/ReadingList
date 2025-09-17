@@ -144,11 +144,13 @@ public class MainMenuView : BaseView
 
     private void NavigateToReadingGoalsView()
     {
-        ShowMessage("Info", "Reading Goals view - Coming next!");
+        ReadingGoalsView readingGoalsView = new ReadingGoalsView(_readingGoalService, _navigationManager);
+        _navigationManager.NavigateTo(readingGoalsView);
     }
 
     private void NavigateToStatisticsView()
     {
-        ShowMessage("Info", "Statistics view - Coming next!");
+        StatisticsView statisticsView = new StatisticsView(_readingListService, _readingGoalService, _navigationManager);
+        _navigationManager.NavigateTo(statisticsView);
     }
 }
