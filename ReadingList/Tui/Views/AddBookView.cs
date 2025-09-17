@@ -1,4 +1,3 @@
-using ReadingList.Data;
 using ReadingList.Models;
 using ReadingList.Models.Enums;
 using ReadingList.Services;
@@ -11,11 +10,10 @@ public class AddBookView : BaseView
 {
     private readonly IBookService _bookService;
     private readonly IReadingListService _readingListService;
-    private readonly NavigationManager _navigationManager;
-    private TextField _searchTextField;
-    private ListView _resultsListView;
-    private ComboBox _statusCombo;
-    private Label _resultsLabel;
+    private readonly TextField _searchTextField = new TextField();
+    private readonly ListView _resultsListView = new ListView();
+    private readonly ComboBox _statusCombo = new ComboBox();
+    private readonly Label _resultsLabel = new Label();
     private List<Book> _searchResults;
     private Book? _selectedBook;
 
@@ -23,14 +21,12 @@ public class AddBookView : BaseView
         NavigationManager navigationManager,
         IBookService bookService,
         IReadingListService readingListService) 
-        : base("Add Book to Reading List")
+        : base("Add Book to Reading List", navigationManager)
     {
         _bookService = bookService;
         _readingListService = readingListService;
-        _navigationManager = navigationManager;
         _searchResults = new List<Book>();
 
-        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
@@ -51,12 +47,10 @@ public class AddBookView : BaseView
             Y = 0
         };
 
-        _searchTextField = new TextField()
-        {
-            X = Pos.Right(searchLabel) + 2,
-            Y = 0,
-            Width = 25
-        };
+        _searchTextField.X = Pos.Right(searchLabel) + 2;
+        _searchTextField.Y = 0;
+        _searchTextField.Width = 25;
+        
 
         Button searchButton = new Button("Search")
         {
@@ -77,19 +71,13 @@ public class AddBookView : BaseView
             Height = 10
         };
 
-        _resultsLabel = new Label("Search for books to add to your reading list")
-        {
-            X = 1,
-            Y = 0
-        };
+        _resultsLabel.X = 1;
+        _resultsLabel.Y = 0;
 
-        _resultsListView = new ListView()
-        {
-            X = 1,
-            Y = 1,
-            Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 2
-        };
+        _resultsListView.X = 1;
+        _resultsListView.Y = 1;
+        _resultsListView.Width = Dim.Fill() - 2;
+        _resultsListView.Height = Dim.Fill() - 2;
 
         _resultsListView.SelectedItemChanged += OnBookHighlighted;
         _resultsListView.OpenSelectedItem += OnBookSelected;
@@ -111,13 +99,10 @@ public class AddBookView : BaseView
             Y = 0
         };
 
-        _statusCombo = new ComboBox()
-        {
-            X = Pos.Right(statusLabel) + 2,
-            Y = 0,
-            Width = 20,
-            Height = 6
-        };
+        _statusCombo.X = Pos.Right(statusLabel) + 2;
+        _statusCombo.Y = 0;
+        _statusCombo.Width = 20;
+        _statusCombo.Height = 6;
 
         _statusCombo.SetSource(new string[] 
         { 
@@ -177,6 +162,7 @@ public class AddBookView : BaseView
         }
         catch (Exception ex)
         {
+            System.Console.Write("Error searching for books:\n{0}\n", ex.Message);
             _resultsLabel.Text = "Search failed";
             _searchResults.Clear();
             _resultsListView.SetSource(new string[0]);

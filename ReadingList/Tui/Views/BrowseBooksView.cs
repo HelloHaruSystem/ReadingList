@@ -15,8 +15,7 @@ public class BrowseBooksView : BaseView
         : base("Browse All Books", navigationManager)
     {
         _bookService = bookService;
-
-        SetNavigationManager(navigationManager);
+        
         SetupUI();
     }
 

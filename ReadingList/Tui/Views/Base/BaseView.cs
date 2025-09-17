@@ -4,7 +4,7 @@ namespace ReadingList.Tui.Views.Base;
 
 public abstract class BaseView : Window
 {
-    protected readonly NavigationManager _navigationManager;
+    protected NavigationManager _navigationManager;
 
     protected BaseView(string title, NavigationManager navigationManager) : base(title)
     {
