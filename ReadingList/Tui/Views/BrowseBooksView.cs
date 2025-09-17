@@ -14,7 +14,7 @@ public class BrowseBooksView : BaseView
 
     public BrowseBooksView(
         IBookService bookService,
-        NavigationManager navigationManager)
+        NavigationManager navigationManager) 
         : base("Browse All Books")
     {
         _bookService = bookService;
@@ -27,7 +27,8 @@ public class BrowseBooksView : BaseView
 
     protected override void SetupUI()
     {
-        _booksListView = new ListView
+        // Create books list view
+        _booksListView = new ListView()
         {
             X = 1,
             Y = 1,
@@ -37,24 +38,25 @@ public class BrowseBooksView : BaseView
 
         _booksListView.OpenSelectedItem += OnBookSelected;
 
+        // Create back button
         Button backButton = new Button("Back")
         {
             X = 1,
             Y = Pos.Bottom(this) - 3
         };
 
+        backButton.Clicked += () => _navigationManager.NavigateBack();
+
+        // Create refresh button
         Button refreshButton = new Button("Refresh")
         {
             X = Pos.Right(backButton) + 2,
             Y = Pos.Bottom(this) - 3
         };
 
-        // add components
-        Add(_booksListView, backButton, refreshButton);
-
-        // add events
-        backButton.Clicked += () => _navigationManager.NavigateBack();
         refreshButton.Clicked += async () => await LoadBooksAsync();
+
+        Add(_booksListView, backButton, refreshButton);
     }
 
     public override async void OnViewActivated()
@@ -69,7 +71,7 @@ public class BrowseBooksView : BaseView
             IEnumerable<Book> books = await _bookService.GetAllBooksAsync();
             _books = books.ToList();
 
-            // Convert books to displayable strings
+            // Convert books to display strings
             string[] bookDisplayItems = _books.Select(FormatBookForDisplay).ToArray();
             _booksListView.SetSource(bookDisplayItems);
 

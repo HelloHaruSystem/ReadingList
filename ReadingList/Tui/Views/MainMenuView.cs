@@ -16,7 +16,8 @@ public class MainMenuView : BaseView
         IBookService bookService,
         IReadingListService readingListService,
         IReadingGoalService readingGoalService,
-        NavigationManager navigationManager) : base("Reading List - Main Menu")
+        NavigationManager navigationManager) 
+        : base("Reading List - Main Menu")
     {
         _bookService = bookService;
         _readingListService = readingListService;
@@ -37,7 +38,7 @@ public class MainMenuView : BaseView
         string[] menuOptions = new string[]
         {
             "1. Browse All Books",
-            "2. Search Books",
+            "2. Search Books", 
             "3. My Reading List",
             "4. Add Book to List",
             "5. Update Reading Status",
@@ -95,7 +96,6 @@ public class MainMenuView : BaseView
     }
 
     // Navigation methods
-    // TODO: add the DI container
     private void NavigateToBrowseBooksView()
     {
         BrowseBooksView browseBooksView = new BrowseBooksView(_bookService, _navigationManager);

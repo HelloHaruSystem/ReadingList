@@ -29,24 +29,32 @@ public class SearchBooksView : BaseView
 
     protected override void SetupUI()
     {
-        // Search input section
-        Label searchLabel = new Label("Search Term:")
+        // Search section in a frame
+        FrameView searchFrame = new FrameView("Search")
         {
             X = 1,
-            Y = 1
+            Y = 1,
+            Width = Dim.Fill() - 2,
+            Height = 4
+        };
+
+        Label searchLabel = new Label("Books:")
+        {
+            X = 1,
+            Y = 0
         };
 
         _searchTextField = new TextField()
         {
             X = Pos.Right(searchLabel) + 2,
-            Y = 1,
-            Width = 30
+            Y = 0,
+            Width = 25
         };
 
         Button searchButton = new Button("Search")
         {
             X = Pos.Right(_searchTextField) + 2,
-            Y = 1
+            Y = 0
         };
 
         searchButton.Clicked += async () => await PerformSearchAsync();
@@ -61,28 +69,48 @@ public class SearchBooksView : BaseView
             }
         };
 
-        // Results section
+        searchFrame.Add(searchLabel, _searchTextField, searchButton);
+
+        // Results section in a frame
+        FrameView resultsFrame = new FrameView("Results")
+        {
+            X = 1,
+            Y = 5,
+            Width = Dim.Fill() - 2,
+            Height = Dim.Fill() - 10
+        };
+
         _resultsLabel = new Label("Enter search term and press Search")
         {
             X = 1,
-            Y = 3
+            Y = 0
         };
 
         _resultsListView = new ListView()
         {
             X = 1,
-            Y = 4,
+            Y = 1,
             Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 7
+            Height = Dim.Fill() - 2
         };
 
         _resultsListView.OpenSelectedItem += OnBookSelected;
 
-        // Buttons
+        resultsFrame.Add(_resultsLabel, _resultsListView);
+
+        // Action buttons in a frame
+        FrameView actionFrame = new FrameView("Actions")
+        {
+            X = 1,
+            Y = Pos.Bottom(resultsFrame),
+            Width = Dim.Fill() - 2,
+            Height = 4
+        };
+
         Button backButton = new Button("Back")
         {
             X = 1,
-            Y = Pos.Bottom(this) - 3
+            Y = 1
         };
 
         backButton.Clicked += () => _navigationManager.NavigateBack();
@@ -90,12 +118,13 @@ public class SearchBooksView : BaseView
         Button clearButton = new Button("Clear")
         {
             X = Pos.Right(backButton) + 2,
-            Y = Pos.Bottom(this) - 3
+            Y = 1
         };
 
         clearButton.Clicked += () => ClearSearch();
 
-        Add(searchLabel, _searchTextField, searchButton, _resultsLabel, _resultsListView, backButton, clearButton);
+        actionFrame.Add(backButton, clearButton);
+        Add(searchFrame, resultsFrame, actionFrame);
     }
 
     public override void OnViewActivated()

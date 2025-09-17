@@ -31,17 +31,25 @@ public class MyReadingListView : BaseView
 
     protected override void SetupUI()
     {
-        // Status filter label and combo
-        Label filterLabel = new Label("Filter by Status:")
+        // Filter section in a frame
+        FrameView filterFrame = new FrameView("Filter")
         {
             X = 1,
-            Y = 1
+            Y = 1,
+            Width = Dim.Fill() - 2,
+            Height = 4
+        };
+
+        Label filterLabel = new Label("By Status:")
+        {
+            X = 1,
+            Y = 0
         };
 
         _statusFilterCombo = new ComboBox()
         {
             X = Pos.Right(filterLabel) + 2,
-            Y = 1,
+            Y = 0,
             Width = 20,
             Height = 8
         };
@@ -59,22 +67,41 @@ public class MyReadingListView : BaseView
         _statusFilterCombo.Text = "All";
         _statusFilterCombo.SelectedItemChanged += OnStatusFilterChanged;
 
-        // Books list view
+        filterFrame.Add(filterLabel, _statusFilterCombo);
+
+        // Books list in a frame
+        FrameView booksFrame = new FrameView("My Books")
+        {
+            X = 1,
+            Y = 5,
+            Width = Dim.Fill() - 2,
+            Height = Dim.Fill() - 10
+        };
+
         _booksListView = new ListView()
         {
             X = 1,
-            Y = 3,
+            Y = 1,
             Width = Dim.Fill() - 2,
-            Height = Dim.Fill() - 6
+            Height = Dim.Fill() - 2
         };
 
         _booksListView.OpenSelectedItem += OnBookSelected;
+        booksFrame.Add(_booksListView);
 
-        // Buttons
+        // Action buttons in a frame
+        FrameView actionFrame = new FrameView("Actions")
+        {
+            X = 1,
+            Y = Pos.Bottom(booksFrame),
+            Width = Dim.Fill() - 2,
+            Height = 4
+        };
+
         Button backButton = new Button("Back")
         {
             X = 1,
-            Y = Pos.Bottom(this) - 3
+            Y = 1
         };
 
         backButton.Clicked += () => _navigationManager.NavigateBack();
@@ -82,12 +109,13 @@ public class MyReadingListView : BaseView
         Button refreshButton = new Button("Refresh")
         {
             X = Pos.Right(backButton) + 2,
-            Y = Pos.Bottom(this) - 3
+            Y = 1
         };
 
         refreshButton.Clicked += async () => await LoadBooksAsync();
 
-        Add(filterLabel, _statusFilterCombo, _booksListView, backButton, refreshButton);
+        actionFrame.Add(backButton, refreshButton);
+        Add(filterFrame, booksFrame, actionFrame);
     }
 
     public override async void OnViewActivated()
