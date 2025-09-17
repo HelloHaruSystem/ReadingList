@@ -24,13 +24,23 @@ public class MainMenuView : BaseView
         _readingGoalService = readingGoalService;
         _navigationManager = navigationManager;
 
+        SetNavigationManager(navigationManager);
         SetupUI();
     }
 
     protected override void SetupUI()
     {
+        FrameView menuFrame = new FrameView("Main Menu")
+        {
+            X = Pos.Center() - 18,
+            Y = Pos.Center() - 5,
+            Width = 36,
+            Height = 12
+        };
+
         ListView menuList = CreateMainMenu();
-        Add(menuList);
+        menuFrame.Add(menuList);
+        Add(menuFrame);
     }
 
     private ListView CreateMainMenu()
@@ -50,10 +60,10 @@ public class MainMenuView : BaseView
 
         ListView menuList = new ListView(menuOptions)
         {
-            X = Pos.Center(),
-            Y = Pos.Center(),
-            Width = 30,
-            Height = menuOptions.Length
+            X = 0,
+            Y = 0,
+            Width = Dim.Fill(),
+            Height = Dim.Fill()
         };
 
         menuList.OpenSelectedItem += OnMenuItemSelected;
