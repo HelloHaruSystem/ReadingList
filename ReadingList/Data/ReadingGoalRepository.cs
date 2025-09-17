@@ -188,8 +188,8 @@ public class ReadingGoalRepository : IReadingGoalRepository
                     IsCompleted = SqlDataReaderHelper.GetBool(reader, "is_completed"),
                 };
 
-                int booksAdded = SqlDataReaderHelper.GetInt(reader, "books_added");
-                int totalPages = SqlDataReaderHelper.GetInt(reader, "total_pages");
+                int booksAdded = SqlDataReaderHelper.GetIntOrNull(reader, "books_added") ?? 0;
+                int totalPages = SqlDataReaderHelper.GetIntOrNull(reader, "total_pages") ?? 0;
             
                 return (goal, booksAdded, totalPages);
             }

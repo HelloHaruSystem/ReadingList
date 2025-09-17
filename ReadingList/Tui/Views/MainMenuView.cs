@@ -144,8 +144,8 @@ public class MainMenuView : BaseView
 
     private void NavigateToReadingGoalsView()
     {
-        ReadingGoalsView readingGoalsView = new ReadingGoalsView(_readingGoalService, _navigationManager);
-        _navigationManager.NavigateTo(readingGoalsView);
+        ReadingGoalsView readingGoalsView = new ReadingGoalsView(_readingGoalService, _bookService, _navigationManager);
+    _navigationManager.NavigateTo(readingGoalsView);
     }
 
     private void NavigateToStatisticsView()
