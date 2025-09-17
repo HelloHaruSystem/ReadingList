@@ -141,7 +141,7 @@ public class SearchBooksView : BaseView
             SetNeedsDisplay();
 
             IEnumerable<Book> results = await _bookService.SearchBooksAsync(searchTerm);
-            _searchResults = results?.ToList() ?? new List<Book>();
+            _searchResults = results.ToList();
 
             UpdateResultsDisplay(searchTerm);
         }
